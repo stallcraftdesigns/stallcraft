@@ -1,18 +1,36 @@
 "use client";
-
 import { Box, Grid, Typography } from "@mui/material";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import CountUp from "react-countup";
 
 const Count = () => {
   const [startCounting, setStartCounting] = useState(false);
+  const ref = useRef(null);
 
   useEffect(() => {
-    setStartCounting(true);
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setStartCounting(true);
+        }
+      },
+      { threshold: 0.5 } // Trigger when at least 50% of the component is visible
+    );
+
+    if (ref.current) {
+      observer.observe(ref.current);
+    }
+
+    return () => {
+      if (ref.current) {
+        observer.unobserve(ref.current);
+      }
+    };
   }, []);
 
   return (
     <Box
+      ref={ref}
       sx={{
         width: "100%",
         height: "auto",
@@ -21,7 +39,8 @@ const Count = () => {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        background: "radial-gradient(circle, rgba(91,193,188,1) 0%, rgba(64,66,66,1) 100%)",
+        background:
+          "radial-gradient(circle, rgba(91,193,188,1) 0%, rgba(64,66,66,1) 100%)",
         py: 10,
         fontFamily: "var(--font-syne)",
         mb: 3,
@@ -51,9 +70,7 @@ const Count = () => {
                 fontFamily: "var(--font-syne)",
               }}
             >
-              {startCounting && (
-                <CountUp start={0} end={item.end} duration={3} />
-              )}
+              {startCounting && <CountUp start={0} end={item.end} duration={3} />}
               +
             </Typography>
             <Typography

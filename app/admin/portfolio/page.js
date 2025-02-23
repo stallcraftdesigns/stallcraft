@@ -307,7 +307,7 @@ export default function PortfolioPage() {
             onChange={(e) => setTitle(e.target.value)}
             margin="normal"
           />
-          <FormControl fullWidth>
+          <FormControl fullWidth margin="normal">
             <InputLabel id="status-label">Status</InputLabel>
             <Select
               value={status}

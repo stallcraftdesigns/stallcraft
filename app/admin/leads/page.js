@@ -119,8 +119,11 @@ export default function LeadPage() {
             onChange={(e) => setFilterStatus(e.target.value)}
             fullWidth
             displayEmpty
-            sx={{ background: "#fff", borderRadius: 2 }}
-          >
+            sx={{
+              background: "#fff",
+              borderRadius: 2,
+              "& .MuiSelect-select": { py: 1 },
+            }}          >
             <MenuItem value="">All</MenuItem>
             <MenuItem value="new">New</MenuItem>
             <MenuItem value="contacted">Contacted</MenuItem>

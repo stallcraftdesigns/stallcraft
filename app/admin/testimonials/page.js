@@ -308,6 +308,7 @@ export default function TestimonialsPage() {
               value={status}
               onChange={(e) => setStatus(e.target.value)}
               label="Status"
+              margin="normal"
             >
               <MenuItem value="active">Active</MenuItem>
               <MenuItem value="inactive">Inactive</MenuItem>
