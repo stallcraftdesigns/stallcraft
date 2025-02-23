@@ -133,6 +133,7 @@ export default function AdminLayout() {
                     padding: "12px",
                     borderRadius: "8px",
                     textDecoration: "none",
+                    mb: 1,
                     color: isActive ? "blue" : "inherit", // Active item color
                     fontFamily: "var(--font-syne)",
                     fontWeight: "800",

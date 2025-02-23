@@ -34,6 +34,18 @@ class ServiceService {
         return this.services;
     }
 
+      // Get all active services (Uses cache unless forceRefresh is true)
+      static async getActiveServices(forceRefresh = false) {
+        // Fetch all services (either from cache or Firestore)
+        const allServices = await this.getAllServices(forceRefresh);
+
+        // Filter services where status is 'active'
+        const activeServices = allServices.filter((service) => service.status === "active");
+
+        consoleManager.log("Returning active services. Count:", activeServices.length);
+        return activeServices;
+    }
+
     // Get specific service by ID
     static async getServiceById(serviceId) {
         try {

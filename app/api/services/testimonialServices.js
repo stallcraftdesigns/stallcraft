@@ -34,6 +34,18 @@ class TestimonialService {
         return this.testimonials;
     }
 
+     // Get all active testimonials (Uses cache unless forceRefresh is true)
+     static async getActiveTestimonials(forceRefresh = false) {
+        // Fetch all testimonials (either from cache or Firestore)
+        const allTestimonials = await this.getAllTestimonials(forceRefresh);
+
+        // Filter testimonials where status is 'active'
+        const activeTestimonials = allTestimonials.filter((testimonial) => testimonial.status === "active");
+
+        consoleManager.log("Returning active testimonials. Count:", activeTestimonials.length);
+        return activeTestimonials;
+    }
+
     // Add a new testimonial with createdOn timestamp
     static async addTestimonial(testimonialData) {
         try {

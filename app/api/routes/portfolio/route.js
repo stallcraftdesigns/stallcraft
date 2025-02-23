@@ -4,10 +4,24 @@ import PortfolioService from "../../services/portfolioServices";
 import consoleManager from "../../utils/consoleManager";
 
 // Get all portfolios (GET)
-export async function GET() {
+export async function GET(req) {
     try {
-        const portfolios = await PortfolioService.getAllPortfolios();
-        consoleManager.log("✅ Fetched all portfolios:", portfolios.length);
+        // Extract query parameters
+        const { searchParams } = new URL(req.url);
+        const status = searchParams.get("status");
+
+        let portfolios;
+
+        // Fetch portfolios based on status filter
+        if (status === "active") {
+            portfolios = await PortfolioService.getActivePortfolios();
+            consoleManager.log("Fetched active portfolios:", portfolios.length);
+        } else {
+            portfolios = await PortfolioService.getAllPortfolios();
+            consoleManager.log("Fetched all portfolios:", portfolios.length);
+        }
+
+
         return NextResponse.json({
             statusCode: 200,
             message: "Portfolios fetched successfully",
@@ -31,6 +45,7 @@ export async function POST(req) {
         const formData = await req.formData();
         const title = formData.get("title");
         const file = formData.get("image");
+        const status = formData.get("status");
 
         if (!title || !file) {
             return NextResponse.json({
@@ -48,6 +63,7 @@ export async function POST(req) {
         const newPortfolio = await PortfolioService.addPortfolio({
             title,
             image: imageUrl,
+            status,
         });
 
         consoleManager.log("✅ Portfolio created successfully:", newPortfolio);

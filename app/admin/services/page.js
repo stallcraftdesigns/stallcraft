@@ -22,6 +22,10 @@ import {
   CircularProgress,
   Snackbar,
   Alert,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { FaRegEdit } from "react-icons/fa";
@@ -29,6 +33,7 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 
 export default function ServicesPage() {
   const [services, setServices] = useState([]);
+  const [filteredServices, setFilteredServices] = useState([]);
   const [loading, setLoading] = useState({
     get: false, // Loading state for fetching services
     add: false, // Loading state for adding a service
@@ -41,11 +46,13 @@ export default function ServicesPage() {
   const [selectedService, setSelectedService] = useState(null);
   const [deleteId, setDeleteId] = useState(null);
   const [name, setName] = useState("");
+  const [status, setStatus] = useState("active"); // Default status
   const [shortDescription, setShortDescription] = useState("");
   const [longDescription, setLongDescription] = useState("");
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState("");
   const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
+  const [filter, setFilter] = useState("all"); // Filter state for status
 
   // Fetch services from API
   const fetchServices = async () => {
@@ -54,6 +61,7 @@ export default function ServicesPage() {
       const response = await fetch("/api/routes/services");
       const data = await response.json();
       setServices(data.data || []);
+      setFilteredServices(data.data || []); // Initialize filtered services
     } catch (error) {
       console.error("Error fetching services:", error);
       setSnackbar({ open: true, message: "Failed to fetch services", severity: "error" });
@@ -62,16 +70,25 @@ export default function ServicesPage() {
     }
   };
 
-  // Fetch services on component mount
   useEffect(() => {
     fetchServices();
   }, []);
+
+  // Fetch services on component mount
+  useEffect(() => {
+    if (filter === "all") {
+      setFilteredServices(services);
+    } else {
+      setFilteredServices(services?.filter((service) => service.status === filter));
+    }
+  }, [filter, services]);
 
   // Open modal for Add or Edit
   const handleOpen = (service = null) => {
     setEditing(!!service);
     setSelectedService(service);
     setName(service ? service.name : "");
+    setStatus(service ? service.status : "active"); // Initialize status
     setShortDescription(service ? service.shortDescription : "");
     setLongDescription(service ? service.longDescription : "");
     setPreview(service ? service.image : "");
@@ -83,6 +100,7 @@ export default function ServicesPage() {
   const handleClose = () => {
     setOpen(false);
     setName("");
+    setStatus("")
     setShortDescription("");
     setLongDescription("");
     setPreview("");
@@ -108,6 +126,7 @@ export default function ServicesPage() {
 
       const formData = new FormData();
       formData.append("name", name);
+      formData.append("status", status); // Add status to the form data
       formData.append("shortDescription", shortDescription);
       formData.append("longDescription", longDescription);
       if (image) formData.append("image", image);
@@ -176,18 +195,44 @@ export default function ServicesPage() {
   return (
     <Container maxWidth="lg" sx={{ mt: 4 }}>
       {/* Header */}
-      <Grid container justifyContent="space-between" alignItems="center" mb={3}>
+      <Grid container alignItems="center" justifyContent="space-between" mb={3}>
         <Typography variant="h5" fontWeight="bold">
           Services
         </Typography>
-        <Button
-          variant="contained"
-          startIcon={<AddIcon />}
-          onClick={() => handleOpen()}
-          disabled={loading.get || loading.add || loading.update || loading.delete} // Disable button during any loading state
-        >
-          Add Service
-        </Button>
+
+        {/* Filter and Add Button */}
+        <Grid container item xs={6} justifyContent="flex-end" spacing={2}>
+          <Grid item>
+            <FormControl sx={{ minWidth: 150 }}>
+              <Select
+                value={filter}
+                onChange={(e) => setFilter(e.target.value)}
+                fullWidth
+                displayEmpty
+                sx={{
+                  background: "#fff",
+                  borderRadius: 2,
+                  "& .MuiSelect-select": { py: 1 },
+                }}
+              >
+                <MenuItem value="all">All</MenuItem>
+                <MenuItem value="active">Active</MenuItem>
+                <MenuItem value="inactive">Inactive</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
+
+          <Grid item>
+            <Button
+              variant="contained"
+              startIcon={<AddIcon />}
+              onClick={() => handleOpen()}
+              disabled={loading.get || loading.add || loading.update || loading.delete}
+            >
+              Add Service
+            </Button>
+          </Grid>
+        </Grid>
       </Grid>
 
       {/* Loading State for GET */}
@@ -195,7 +240,7 @@ export default function ServicesPage() {
         <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
           <CircularProgress />
         </Box>
-      ) : services.length === 0 ? (
+      ) : filteredServices.length === 0 ? (
         <Typography textAlign="center" sx={{ mt: 4, fontSize: "1.2rem" }}>
           No services available
         </Typography>
@@ -206,12 +251,13 @@ export default function ServicesPage() {
             <TableHead>
               <TableRow sx={{ backgroundColor: "#333" }}>
                 <TableCell sx={{ color: "white", fontWeight: "bold" }}>Name</TableCell>
+                <TableCell sx={{ color: "white", fontWeight: "bold" }}>Status</TableCell>
                 <TableCell sx={{ color: "white", fontWeight: "bold" }}>Short Info</TableCell>
                 <TableCell sx={{ color: "white", fontWeight: "bold" }}>Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {services.map((service, index) => (
+              {filteredServices.map((service, index) => (
                 <TableRow
                   key={service.id}
                   sx={{
@@ -219,6 +265,7 @@ export default function ServicesPage() {
                   }}
                 >
                   <TableCell sx={{ fontSize: "1.1rem", fontWeight: "500" }}>{service.name}</TableCell>
+                  <TableCell sx={{ fontSize: "1.1rem", fontWeight: "500" }}>{service.status}</TableCell>
                   <TableCell sx={{ fontSize: "1.1rem", fontWeight: "500" }}>{service.shortDescription}</TableCell>
                   <TableCell>
                     <IconButton
@@ -266,6 +313,19 @@ export default function ServicesPage() {
             <Grid item xs={12} sm={6}>
               <TextField fullWidth label="Name" value={name} onChange={(e) => setName(e.target.value)} />
             </Grid>
+            <Grid item xs={12} sm={6}>
+              <FormControl fullWidth>
+                <InputLabel id="status-label">Status</InputLabel>
+                <Select
+                  value={status}
+                  onChange={(e) => setStatus(e.target.value)}
+                  label="Status"
+                >
+                  <MenuItem value="active">Active</MenuItem>
+                  <MenuItem value="inactive">Inactive</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
             <Grid item xs={12}>
               <TextField fullWidth label="Short Description" value={shortDescription} onChange={(e) => setShortDescription(e.target.value)} />
             </Grid>
@@ -285,7 +345,9 @@ export default function ServicesPage() {
           </Button>
 
           <Grid container justifyContent="flex-end" mt={2}>
-            <Button onClick={handleClose} color="error">Cancel</Button>
+            <Button onClick={handleClose} color="error" sx={{ mr: 2 }}>
+              Cancel
+              </Button>
             <Button
               onClick={handleSubmit}
               variant="contained"

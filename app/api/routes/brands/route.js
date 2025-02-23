@@ -4,10 +4,24 @@ import consoleManager from "../../utils/consoleManager";
 import { UploadImage } from "../../controller/imageController";
 
 // Get all brands (GET)
-export async function GET() {
+export async function GET(req) {
     try {
-        const brands = await BrandsService.getAllBrands();
-        consoleManager.log("Fetched all brands:", brands.length);
+        // Extract query parameters
+        const { searchParams } = new URL(req.url);
+        const status = searchParams.get("status");
+
+        let brands;
+
+        // Fetch brands based on status filter
+        if (status === "active") {
+            brands = await BrandsService.getActiveBrands();
+            consoleManager.log("Fetched active brands:", brands.length);
+        } else {
+            brands = await BrandsService.getAllBrands();
+            consoleManager.log("Fetched all brands:", brands.length);
+        }
+
+
         return NextResponse.json({
             statusCode: 200,
             message: "Brands fetched successfully",
@@ -31,6 +45,7 @@ export async function POST(req) {
         const formData = await req.formData();
         const title = formData.get("title");
         const file = formData.get("image");
+        const status = formData.get("status")
 
         if (!title || !file) {
             return NextResponse.json({
@@ -44,7 +59,7 @@ export async function POST(req) {
         const imageUrl = await UploadImage(file, 200, 100);
 
         // Save brand in DB
-        const newBrand = await BrandsService.addBrand({ title, image: imageUrl });
+        const newBrand = await BrandsService.addBrand({ title, image: imageUrl, status });
 
         return NextResponse.json({
             statusCode: 201,
@@ -53,7 +68,7 @@ export async function POST(req) {
             errorCode: "NO",
             errorMessage: "",
         }, { status: 201 });
-        
+
     } catch (error) {
         consoleManager.error("Error in POST /api/brands:", error);
         return NextResponse.json({

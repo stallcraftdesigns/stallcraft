@@ -12,8 +12,11 @@ export function middleware(request) {
   }
 
   // Check if the user is authenticated
-  const isAuthenticated = request.cookies.get("isAuth")?.value === "true"; // Using cookies for authentication
-  
+  const isAuthCookie = request.cookies.get("isAuth")?.value === "true"; 
+  const authToken = request.cookies.get("authToken")?.value; 
+
+  const isAuthenticated = isAuthCookie && authToken; 
+
   // Protect all /admin routes except /admin/login
   if (pathname.startsWith("/admin") && pathname !== "/admin/login") {
     if (!isAuthenticated) {

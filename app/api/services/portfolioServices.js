@@ -34,6 +34,18 @@ class PortfolioService {
         return this.portfolios;
     }
 
+     // Get all active portfolio projects (Uses cache unless forceRefresh is true)
+     static async getActivePortfolios(forceRefresh = false) {
+        // Fetch all portfolios (either from cache or Firestore)
+        const allPortfolios = await this.getAllPortfolios(forceRefresh);
+
+        // Filter portfolios where status is 'active'
+        const activePortfolios = allPortfolios.filter((portfolio) => portfolio.status === "active");
+
+        consoleManager.log("Returning active portfolios. Count:", activePortfolios.length);
+        return activePortfolios;
+    }
+
     // Add a new portfolio project with createdOn timestamp
     static async addPortfolio(portfolioData) {
         try {

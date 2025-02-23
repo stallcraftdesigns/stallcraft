@@ -6,7 +6,7 @@ import { ReplaceImage } from "../../../controller/imageController";
 // Get a single service by ID (GET)
 export async function GET(req, { params }) {
     try {
-        const { id } = params;
+        const { id } = await params;
         const service = await ServiceService.getServiceById(id);
 
         if (!service) {
@@ -38,15 +38,22 @@ export async function GET(req, { params }) {
 // Update a service by ID (PUT)
 export async function PUT(req, { params }) {
     try {
-        const { id } = params;
+        const { id } = await params;
         const formData = await req.formData();
         if (!id) throw new Error("Service ID is required");
 
         let updateData = {};
-        const title = formData.get("title");
+        const title = formData.get("name");
+        const status = formData.get("status");
         const image = formData.get("image");
+        const shortDescription = formData.get("shortDescription");
+        const longDescription = formData.get("longDescription");
+        
 
         if (title) updateData.title = title;
+        if (status) updateData.status = status;
+        if (shortDescription) updateData.shortDescription = shortDescription;
+        if (longDescription) updateData.longDescription = longDescription;
 
         const existingService = await ServiceService.getServiceById(id);
         if (!existingService) {
@@ -61,7 +68,7 @@ export async function PUT(req, { params }) {
             if (!existingService.image) {
                 console.warn("No old image URL found for replacement.");
             }
-            const imageUrl = await ReplaceImage(image, existingService.image, 200, 100);
+            const imageUrl = await ReplaceImage(image, existingService.image, 500, 350);
             updateData.image = imageUrl;
         } else {
             updateData.image = existingService.image;
@@ -90,7 +97,7 @@ export async function PUT(req, { params }) {
 // Delete a service by ID (DELETE)
 export async function DELETE(req, { params }) {
     try {
-        const { id } = params;
+        const { id } = await params;
         if (!id) throw new Error("Service ID is required");
 
         const existingService = await ServiceService.getServiceById(id);

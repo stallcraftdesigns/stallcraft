@@ -12,13 +12,10 @@ import {
   Alert,
   Box,
   Button,
-  CircularProgress, // ✅ Manually added spinner
+  CircularProgress,
 } from "@mui/material";
 import { Visibility, VisibilityOff, Email } from "@mui/icons-material";
 import LockIcon from "@mui/icons-material/Lock";
-
-// Dummy user credentials (Replace with API call)
-const users = [{ email: "admin@admin.com", password: "123456" }];
 
 export default function LoginPage() {
   const router = useRouter();
@@ -26,27 +23,35 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false); // 🔥 Loading state
+  const [loading, setLoading] = useState(false);
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    setLoading(true); // Start loading
+    setLoading(true);
+    setError("");
 
-    setTimeout(() => {
-      const validUser = users.find(
-        (user) => user.email === email && user.password === password
-      );
+    try {
+      const response = await fetch("/api/routes/auth", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+        credentials: "include",
+      });
 
-      if (validUser) {
-        document.cookie = "isAuth=true; path=/; max-age=86400"; // Set cookie for 1 day
-        router.push("/admin"); // Redirect to admin dashboard
+      const data = await response.json();
+
+      if (data.statusCode == 201) {
+        router.push("/admin");
       } else {
-        setError("Invalid email or password!");
+        setError(data.errorMessage || "Invalid email or password.");
       }
-
-      setLoading(false); // Stop loading
-    }, 1500); // Simulate API delay
+    } catch (error) {
+      setError("An unexpected error occurred. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
+
 
   return (
     <Box maxWidth="full" backgroundColor="#f4f4f4">
@@ -65,7 +70,7 @@ export default function LoginPage() {
             width: "100%",
             boxShadow: 3,
             borderRadius: 3,
-            backgroundColor: "#ffffff", // White card
+            backgroundColor: "#ffffff",
           }}
         >
           <Typography
@@ -73,7 +78,7 @@ export default function LoginPage() {
             fontWeight="bold"
             textAlign="center"
             mb={3}
-            color="#333" // Dark gray text
+            color="#333"
           >
             Admin Login
           </Typography>
@@ -98,7 +103,7 @@ export default function LoginPage() {
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
-                    <Email style={{ color: "#666" }} /> {/* Soft gray icon */}
+                    <Email style={{ color: "#666" }} />
                   </InputAdornment>
                 ),
               }}
@@ -117,8 +122,7 @@ export default function LoginPage() {
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
-                    <LockIcon style={{ color: "#666" }} />{" "}
-                    {/* Soft gray icon */}
+                    <LockIcon style={{ color: "#666" }} />
                   </InputAdornment>
                 ),
                 endAdornment: (
@@ -135,21 +139,21 @@ export default function LoginPage() {
               }}
             />
 
-            {/* Sign In Button with Manual Loading State */}
+            {/* Sign In Button */}
             <Button
               type="submit"
               variant="contained"
               fullWidth
-              disabled={loading} // ✅ Button disabled while loading
+              disabled={loading}
               sx={{
                 py: 1.5,
                 fontSize: "1rem",
                 borderRadius: 2,
                 mt: 2,
-                backgroundColor: "#555", // Soft dark button
+                backgroundColor: "#555",
                 color: "white",
                 "&:hover": {
-                  backgroundColor: "#444", // Slightly darker hover effect
+                  backgroundColor: "#444",
                 },
               }}
             >

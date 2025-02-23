@@ -22,6 +22,10 @@ import {
   CircularProgress,
   Snackbar,
   Alert,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { FaRegEdit } from "react-icons/fa";
@@ -29,6 +33,7 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 
 export default function PortfolioPage() {
   const [portfolios, setPortfolios] = useState([]);
+  const [filteredPortfolios, setFilteredPortfolios] = useState([]);
   const [loading, setLoading] = useState({
     get: false, // Loading state for fetching portfolios
     add: false, // Loading state for adding a portfolio
@@ -40,10 +45,13 @@ export default function PortfolioPage() {
   const [editing, setEditing] = useState(false);
   const [selectedPortfolio, setSelectedPortfolio] = useState(null);
   const [title, setTitle] = useState("");
+  const [status, setStatus] = useState("active"); // Default status
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState("");
   const [deleteId, setDeleteId] = useState(null);
   const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
+  const [filter, setFilter] = useState("all"); // Filter state for status
+
 
   // Fetch portfolios from API
   const fetchPortfolio = async () => {
@@ -65,11 +73,21 @@ export default function PortfolioPage() {
     fetchPortfolio();
   }, []);
 
+  // Fetch portfolio on component mount
+  useEffect(() => {
+    if (filter === "all") {
+      setFilteredPortfolios(portfolios);
+    } else {
+      setFilteredPortfolios(portfolios?.filter((portfolio) => portfolio.status === filter));
+    }
+  }, [filter, portfolios]);
+
   // Open modal for Add/Edit
   const handleOpen = (portfolio = null) => {
     setEditing(!!portfolio);
     setSelectedPortfolio(portfolio);
     setTitle(portfolio ? portfolio.title : "");
+    setStatus(portfolio ? portfolio.status : "active"); // Default status
     setPreview(portfolio ? portfolio.image : "");
     setImage(null);
     setOpen(true);
@@ -79,6 +97,7 @@ export default function PortfolioPage() {
   const handleClose = () => {
     setOpen(false);
     setTitle("");
+    setStatus(""); // Default status
     setPreview("");
     setImage(null);
   };
@@ -114,6 +133,7 @@ export default function PortfolioPage() {
 
       const formData = new FormData();
       formData.append("title", title);
+      formData.append("status", status);
       if (image) formData.append("image", image);
 
       const response = await fetch(
@@ -168,18 +188,44 @@ export default function PortfolioPage() {
   return (
     <Container maxWidth="lg" sx={{ mt: 4 }}>
       {/* Header */}
-      <Grid container justifyContent="space-between" alignItems="center" mb={3}>
+      <Grid container alignItems="center" justifyContent="space-between" mb={3}>
         <Typography variant="h5" fontWeight="bold">
           Portfolio
         </Typography>
-        <Button
-          variant="contained"
-          startIcon={<AddIcon />}
-          onClick={() => handleOpen()}
-          disabled={loading.get || loading.add || loading.update || loading.delete} // Disable button during any loading state
-        >
-          Add Portfolio
-        </Button>
+
+        {/* Filter and Add Button */}
+        <Grid container item xs={6} justifyContent="flex-end" spacing={2}>
+          <Grid item>
+            <FormControl sx={{ minWidth: 150 }}>
+              <Select
+                value={filter}
+                onChange={(e) => setFilter(e.target.value)}
+                fullWidth
+                displayEmpty
+                sx={{
+                  background: "#fff",
+                  borderRadius: 2,
+                  "& .MuiSelect-select": { py: 1 },
+                }}
+              >
+                <MenuItem value="all">All</MenuItem>
+                <MenuItem value="active">Active</MenuItem>
+                <MenuItem value="inactive">Inactive</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
+
+          <Grid item>
+            <Button
+              variant="contained"
+              startIcon={<AddIcon />}
+              onClick={() => handleOpen()}
+              disabled={loading.get || loading.add || loading.update || loading.delete}
+            >
+              Add Portfolio
+            </Button>
+          </Grid>
+        </Grid>
       </Grid>
 
       {/* Loading State for GET */}
@@ -187,7 +233,7 @@ export default function PortfolioPage() {
         <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
           <CircularProgress />
         </Box>
-      ) : portfolios.length === 0 ? (
+      ) : filteredPortfolios.length === 0 ? (
         <Typography textAlign="center" sx={{ mt: 4, fontSize: "1.2rem" }}>
           No portfolios available
         </Typography>
@@ -198,11 +244,12 @@ export default function PortfolioPage() {
             <TableHead>
               <TableRow sx={{ backgroundColor: "#333" }}>
                 <TableCell sx={{ color: "white", fontWeight: "bold" }}>Title</TableCell>
+                <TableCell sx={{ color: "white", fontWeight: "bold" }}>Status</TableCell>
                 <TableCell sx={{ color: "white", fontWeight: "bold" }}>Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {portfolios.map((portfolio, index) => (
+              {filteredPortfolios.map((portfolio, index) => (
                 <TableRow
                   key={portfolio.id}
                   sx={{
@@ -210,6 +257,7 @@ export default function PortfolioPage() {
                   }}
                 >
                   <TableCell sx={{ fontSize: "1.1rem", fontWeight: "500" }}>{portfolio.title}</TableCell>
+                  <TableCell sx={{ fontSize: "1.1rem", fontWeight: "500" }}>{portfolio.status}</TableCell>
                   <TableCell>
                     <IconButton
                       color="primary"
@@ -259,6 +307,17 @@ export default function PortfolioPage() {
             onChange={(e) => setTitle(e.target.value)}
             margin="normal"
           />
+          <FormControl fullWidth>
+            <InputLabel id="status-label">Status</InputLabel>
+            <Select
+              value={status}
+              onChange={(e) => setStatus(e.target.value)}
+              label="Status"
+            >
+              <MenuItem value="active">Active</MenuItem>
+              <MenuItem value="inactive">Inactive</MenuItem>
+            </Select>
+          </FormControl>
 
           {/* Image Preview */}
           {preview && (

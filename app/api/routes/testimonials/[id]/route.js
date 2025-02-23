@@ -6,7 +6,7 @@ import { ReplaceImage } from "../../../controller/imageController";
 // Get a single testimonial by ID (GET)
 export async function GET(req, { params }) {
     try {
-        const { id } = params;
+        const { id } = await params;
         const testimonial = await TestimonialService.getTestimonialById(id);
 
         if (!testimonial) {
@@ -38,15 +38,17 @@ export async function GET(req, { params }) {
 // Update a testimonial by ID (PUT)
 export async function PUT(req, { params }) {
     try {
-        const { id } = params;
+        const { id } = await params;
         const formData = await req.formData();
         if (!id) throw new Error("Testimonial ID is required");
 
         let updateData = {};
         const title = formData.get("title");
         const image = formData.get("image");
+        const status = formData.get("status");
 
-        if (title) updateData.title = title;
+        if (title) updateData.title = title;    
+        if (status) updateData.status = status;
 
         const existingTestimonial = await TestimonialService.getTestimonialById(id);
         if (!existingTestimonial) {
@@ -90,7 +92,7 @@ export async function PUT(req, { params }) {
 // Delete a testimonial by ID (DELETE)
 export async function DELETE(req, { params }) {
     try {
-        const { id } = params;
+        const { id } = await params;
         if (!id) throw new Error("Testimonial ID is required");
 
         const existingTestimonial = await TestimonialService.getTestimonialById(id);

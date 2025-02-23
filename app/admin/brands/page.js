@@ -22,6 +22,10 @@ import {
   CircularProgress,
   Snackbar,
   Alert,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { FaRegEdit } from "react-icons/fa";
@@ -29,6 +33,7 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 
 export default function BrandsPage() {
   const [brands, setBrands] = useState([]);
+  const [filteredBrands, setFilteredBrands] = useState([]); // For filtered brands
   const [loading, setLoading] = useState({
     get: false, // Loading state for fetching brands
     add: false, // Loading state for adding a brand
@@ -40,10 +45,12 @@ export default function BrandsPage() {
   const [selectedBrand, setSelectedBrand] = useState(null);
   const [title, setTitle] = useState("");
   const [image, setImage] = useState(null);
+  const [status, setStatus] = useState("active"); // Default status
   const [preview, setPreview] = useState("");
   const [deleteDialog, setDeleteDialog] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
   const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
+  const [filter, setFilter] = useState("all"); // Filter state for status
 
   // Fetch brands from API
   const fetchBrands = async () => {
@@ -52,6 +59,7 @@ export default function BrandsPage() {
       const response = await fetch("/api/routes/brands");
       const data = await response.json();
       setBrands(data.data || []);
+      setFilteredBrands(data.data || []); // Initialize filtered brands
     } catch (error) {
       setSnackbar({ open: true, message: "Failed to fetch brands", severity: "error" });
     } finally {
@@ -64,6 +72,15 @@ export default function BrandsPage() {
     fetchBrands();
   }, []);
 
+  // Filter brands based on status
+  useEffect(() => {
+    if (filter === "all") {
+      setFilteredBrands(brands);
+    } else {
+      setFilteredBrands(brands.filter((brand) => brand.status === filter));
+    }
+  }, [filter, brands]);
+
   // Handle Add/Update Brand
   const handleSubmit = async () => {
     const isEditing = editing && selectedBrand;
@@ -72,6 +89,7 @@ export default function BrandsPage() {
 
       const formData = new FormData();
       formData.append("title", title);
+      formData.append("status", status); // Add status to the form data
       if (image) formData.append("image", image);
 
       const response = await fetch(
@@ -85,7 +103,7 @@ export default function BrandsPage() {
       const data = await response.json();
 
       if (data.statusCode === 200 || data.statusCode === 201) {
-        fetchBrands();
+        fetchBrands(); // Refresh the list
         handleClose();
         setSnackbar({ open: true, message: isEditing ? "Brand updated!" : "Brand added!", severity: "success" });
       } else {
@@ -94,7 +112,7 @@ export default function BrandsPage() {
     } catch (error) {
       setSnackbar({ open: true, message: "Operation failed", severity: "error" });
     } finally {
-      setLoading((prev) => ({ ...prev, [isEditing ? "update" : "add"]: false })); // Reset ADD/UPDATE loading state
+      setLoading((prev) => ({ ...prev, [isEditing ? "update" : "add"]: false }));
     }
   };
 
@@ -134,6 +152,7 @@ export default function BrandsPage() {
     setEditing(!!brand);
     setSelectedBrand(brand);
     setTitle(brand ? brand.title : "");
+    setStatus(brand ? brand.status : "active"); // Initialize status
     setPreview(brand ? brand.image : "");
     setImage(null);
     setOpen(true);
@@ -145,6 +164,7 @@ export default function BrandsPage() {
     setTitle("");
     setImage(null);
     setPreview("");
+    setStatus("active"); // Reset status to default
   };
 
   // Handle Image Upload
@@ -165,14 +185,40 @@ export default function BrandsPage() {
         <Typography variant="h5" fontWeight="bold">
           Brands
         </Typography>
-        <Button
-          variant="contained"
-          startIcon={<AddIcon />}
-          onClick={() => handleOpen()}
-          disabled={loading.get || loading.add || loading.update || loading.delete} // Disable button during any loading state
-        >
-          Add Brand
-        </Button>
+
+        {/* Filter and Add Button */}
+        <Grid container item xs={6} justifyContent="flex-end" spacing={2}>
+          <Grid item>
+            <FormControl sx={{ minWidth: 150 }}>
+              <Select
+                value={filter}
+                onChange={(e) => setFilter(e.target.value)}
+                fullWidth
+                displayEmpty
+                sx={{
+                  background: "#fff",
+                  borderRadius: 2,
+                  "& .MuiSelect-select": { py: 1 },
+                }}
+              >
+                <MenuItem value="all">All</MenuItem>
+                <MenuItem value="active">Active</MenuItem>
+                <MenuItem value="inactive">Inactive</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
+
+          <Grid item>
+            <Button
+              variant="contained"
+              startIcon={<AddIcon />}
+              onClick={() => handleOpen()}
+              disabled={loading.get || loading.add || loading.update || loading.delete}
+            >
+              Add Brand
+            </Button>
+          </Grid>
+        </Grid>
       </Grid>
 
       {/* Loading State for GET */}
@@ -180,7 +226,7 @@ export default function BrandsPage() {
         <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
           <CircularProgress />
         </Box>
-      ) : brands.length === 0 ? (
+      ) : filteredBrands.length === 0 ? (
         <Typography textAlign="center" sx={{ mt: 4, fontSize: "1.2rem" }}>
           No brands available
         </Typography>
@@ -191,25 +237,27 @@ export default function BrandsPage() {
             <TableHead>
               <TableRow sx={{ backgroundColor: "#333" }}>
                 <TableCell sx={{ color: "white", fontWeight: "bold" }}>Title</TableCell>
+                <TableCell sx={{ color: "white", fontWeight: "bold" }}>Status</TableCell>
                 <TableCell sx={{ color: "white", fontWeight: "bold" }}>Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {brands.map((brand, index) => (
+              {filteredBrands.map((brand, index) => (
                 <TableRow key={brand.id} sx={{ backgroundColor: index % 2 === 0 ? "#f4f4f4" : "#e0e0e0" }}>
                   <TableCell sx={{ fontSize: "1.1rem", fontWeight: "500" }}>{brand.title}</TableCell>
+                  <TableCell sx={{ fontSize: "1.1rem", fontWeight: "500" }}>{brand.status}</TableCell>
                   <TableCell>
                     <IconButton
                       color="primary"
                       onClick={() => handleOpen(brand)}
-                      disabled={loading.get || loading.add || loading.update || loading.delete} // Disable button during any loading state
+                      disabled={loading.get || loading.add || loading.update || loading.delete}
                     >
                       <FaRegEdit />
                     </IconButton>
                     <IconButton
                       color="error"
                       onClick={() => handleOpenDelete(brand.id)}
-                      disabled={loading.get || loading.add || loading.update || loading.delete} // Disable button during any loading state
+                      disabled={loading.get || loading.add || loading.update || loading.delete}
                     >
                       <RiDeleteBin6Line />
                     </IconButton>
@@ -240,7 +288,22 @@ export default function BrandsPage() {
             {editing ? "Edit Brand" : "Add Brand"}
           </Typography>
           <TextField fullWidth label="Title" value={title} onChange={(e) => setTitle(e.target.value)} margin="normal" />
-          {preview && <Card sx={{ mt: 2, mb: 2 }}><CardMedia component="img" height="200" image={preview} alt="Preview" /></Card>}
+          <FormControl fullWidth margin="normal">
+            <InputLabel id="status-label">Status</InputLabel>
+            <Select
+              value={status}
+              onChange={(e) => setStatus(e.target.value)}
+              label="Status"
+            >
+              <MenuItem value="active">Active</MenuItem>
+              <MenuItem value="inactive">Inactive</MenuItem>
+            </Select>
+          </FormControl>
+          {preview && (
+            <Card sx={{ mt: 2, mb: 2 }}>
+              <CardMedia component="img" height="200" image={preview} alt="Preview" />
+            </Card>
+          )}
           <Button variant="contained" component="label" fullWidth sx={{ mb: 2 }}>
             Upload Image
             <input type="file" hidden onChange={handleImageChange} />
@@ -251,7 +314,7 @@ export default function BrandsPage() {
               onClick={handleSubmit}
               variant="contained"
               color="primary"
-              disabled={loading.add || loading.update} // Disable button during ADD/UPDATE loading state
+              disabled={loading.add || loading.update}
             >
               {loading.add || loading.update ? <CircularProgress size={24} /> : editing ? "Update" : "Add"}
             </Button>
@@ -294,7 +357,7 @@ export default function BrandsPage() {
                 variant="contained"
                 color="error"
                 sx={{ color: "white" }}
-                disabled={loading.delete} // Disable button during DELETE loading state
+                disabled={loading.delete}
               >
                 {loading.delete ? <CircularProgress size={24} /> : "Delete"}
               </Button>

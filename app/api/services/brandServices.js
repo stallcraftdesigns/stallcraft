@@ -34,6 +34,18 @@ class BrandService {
         return this.brands;
     }
 
+     // Get all active brands (Uses cache unless forceRefresh is true)
+     static async getActiveBrands(forceRefresh = false) {
+        // Fetch all brands (either from cache or Firestore)
+        const allBrands = await this.getAllBrands(forceRefresh);
+
+        // Filter brands where status is 'active'
+        const activeBrands = allBrands.filter((brand) => brand.status === "active");
+
+        consoleManager.log("Returning active brands. Count:", activeBrands.length);
+        return activeBrands;
+    }
+
     // Add a new brand with createdOn timestamp
     static async addBrand(brandData) {
         try {

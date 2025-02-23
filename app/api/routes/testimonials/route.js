@@ -4,10 +4,23 @@ import consoleManager from "../../utils/consoleManager";
 import { UploadImage } from "../../controller/imageController";
 
 // Get all testimonials (GET)
-export async function GET() {
+export async function GET(req) {
     try {
-        const testimonials = await TestimonialService.getAllTestimonials();
-        consoleManager.log("Fetched all testimonials:", testimonials.length);
+        // Extract query parameters
+        const { searchParams } = new URL(req.url);
+        const status = searchParams.get("status");
+
+        let testimonials;
+
+        // Fetch testimonials based on status filter
+        if (status === "active") {
+            testimonials = await TestimonialService.getActiveTestimonials();
+            consoleManager.log("Fetched active testimonials:", testimonials.length);
+        } else {
+            testimonials = await TestimonialService.getAllTestimonials();
+            consoleManager.log("Fetched all testimonials:", testimonials.length);
+        }
+
         return NextResponse.json({
             statusCode: 200,
             message: "Testimonials fetched successfully",
@@ -30,6 +43,7 @@ export async function POST(req) {
     try {
         const formData = await req.formData();
         const name = formData.get("name");
+        const status = formData.get("status");
         const message = formData.get("message");
         const file = formData.get("image");
 
@@ -49,6 +63,7 @@ export async function POST(req) {
             name,
             message,
             image: imageUrl,
+            status,
         });
 
         return NextResponse.json({

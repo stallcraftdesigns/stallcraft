@@ -25,6 +25,7 @@ import {
   TextField,
   Card,
   CardMedia,
+  InputLabel,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { FaRegEdit } from "react-icons/fa";
@@ -34,6 +35,7 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 export default function TestimonialsPage() {
   const [testimonials, setTestimonials] = useState([]);
+  const [filteredTestimonials, setFilteredTestimonials] = useState([]);
   const [loading, setLoading] = useState({
     get: false, // Loading state for fetching testimonials
     add: false, // Loading state for adding a testimonial
@@ -41,16 +43,18 @@ export default function TestimonialsPage() {
     delete: false, // Loading state for deleting a testimonial
     toggleVisibility: false, // Loading state for toggling visibility
   });
-  const [filter, setFilter] = useState("all");
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState(false);
   const [selectedTestimonial, setSelectedTestimonial] = useState(null);
   const [name, setName] = useState("");
+  const [status, setStatus] = useState("active")
   const [feedback, setFeedback] = useState("");
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState("");
   const [deleteId, setDeleteId] = useState(null);
   const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
+  const [filter, setFilter] = useState("all"); // Filter state for status
+
 
   // Fetch testimonials from API
   const fetchTestimonials = async () => {
@@ -71,11 +75,21 @@ export default function TestimonialsPage() {
     fetchTestimonials();
   }, []);
 
+  // Fetch testimonials on component mount
+  useEffect(() => {
+    if (filter === "all") {
+      setFilteredTestimonials(testimonials);
+    } else {
+      setFilteredTestimonials(testimonials?.filter((testimonial) => testimonial.status === filter));
+    }
+  }, [filter, testimonials]);
+
   // Open modal for Add/Edit
   const handleOpen = (testimonial = null) => {
     setEditing(!!testimonial);
     setSelectedTestimonial(testimonial);
     setName(testimonial ? testimonial.name : "");
+    setStatus(testimonial ? testimonial.status : "active");
     setFeedback(testimonial ? testimonial.feedback : "");
     setPreview(testimonial ? testimonial.image : "");
     setImage(null);
@@ -86,6 +100,7 @@ export default function TestimonialsPage() {
   const handleClose = () => {
     setOpen(false);
     setName("");
+    setStatus("");
     setFeedback("");
     setPreview("");
     setImage(null);
@@ -110,6 +125,7 @@ export default function TestimonialsPage() {
 
       const formData = new FormData();
       formData.append("name", name);
+      formData.append("status", status);
       formData.append("feedback", feedback);
       if (image) formData.append("image", image);
 
@@ -161,39 +177,6 @@ export default function TestimonialsPage() {
     }
   };
 
-  // Toggle Visibility
-  const handleToggleVisibility = async (id) => {
-    try {
-      setLoading((prev) => ({ ...prev, toggleVisibility: true })); // Set TOGGLE VISIBILITY loading state
-
-      const testimonial = testimonials.find((t) => t.id === id);
-      const updatedVisibility = !testimonial.visible;
-
-      const response = await fetch(`/api/routes/testimonials/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ visible: updatedVisibility }),
-      });
-
-      const data = await response.json();
-
-      if (data.statusCode === 200) {
-        fetchTestimonials();
-        setSnackbar({ open: true, message: `Testimonial ${updatedVisibility ? "shown" : "hidden"}!`, severity: "success" });
-      } else {
-        setSnackbar({ open: true, message: data.errorMessage || "Failed to toggle visibility", severity: "error" });
-      }
-    } catch (error) {
-      setSnackbar({ open: true, message: "Failed to toggle visibility", severity: "error" });
-    } finally {
-      setLoading((prev) => ({ ...prev, toggleVisibility: false })); // Reset TOGGLE VISIBILITY loading state
-    }
-  };
-
-  // Filter Testimonials
-  const filteredTestimonials = testimonials.filter((testimonial) =>
-    filter === "all" ? true : filter === "visible" ? testimonial.visible : !testimonial.visible
-  );
 
   return (
     <Container maxWidth="lg" sx={{ mt: 4 }}>
@@ -219,8 +202,8 @@ export default function TestimonialsPage() {
                 }}
               >
                 <MenuItem value="all">All</MenuItem>
-                <MenuItem value="visible">Visible</MenuItem>
-                <MenuItem value="hidden">Hidden</MenuItem>
+                <MenuItem value="active">Active</MenuItem>
+                <MenuItem value="inactive">Inactive</MenuItem>
               </Select>
             </FormControl>
           </Grid>
@@ -254,8 +237,8 @@ export default function TestimonialsPage() {
             <TableHead>
               <TableRow sx={{ backgroundColor: "#333" }}>
                 <TableCell sx={{ color: "white", fontWeight: "bold" }}>Name</TableCell>
+                <TableCell sx={{ color: "white", fontWeight: "bold" }}>Status</TableCell>
                 <TableCell sx={{ color: "white", fontWeight: "bold" }}>Feedback</TableCell>
-                <TableCell sx={{ color: "white", fontWeight: "bold" }}>Visibility</TableCell>
                 <TableCell sx={{ color: "white", fontWeight: "bold" }}>Actions</TableCell>
               </TableRow>
             </TableHead>
@@ -268,15 +251,8 @@ export default function TestimonialsPage() {
                   }}
                 >
                   <TableCell sx={{ fontSize: "1.1rem", fontWeight: "500" }}>{testimonial.name}</TableCell>
+                  <TableCell sx={{ fontSize: "1.1rem", fontWeight: "500" }}>{testimonial.status}</TableCell>
                   <TableCell sx={{ fontSize: "1.1rem", fontWeight: "500" }}>{testimonial.feedback}</TableCell>
-                  <TableCell>
-                    <IconButton
-                      onClick={() => handleToggleVisibility(testimonial.id)}
-                      disabled={loading.toggleVisibility} // Disable button during TOGGLE VISIBILITY loading state
-                    >
-                      {testimonial.visible ? <VisibilityIcon color="primary" /> : <VisibilityOffIcon color="disabled" />}
-                    </IconButton>
-                  </TableCell>
                   <TableCell>
                     <IconButton
                       color="primary"
@@ -326,6 +302,17 @@ export default function TestimonialsPage() {
             onChange={(e) => setName(e.target.value)}
             margin="normal"
           />
+          <FormControl fullWidth>
+            <InputLabel id="status-label">Status</InputLabel>
+            <Select
+              value={status}
+              onChange={(e) => setStatus(e.target.value)}
+              label="Status"
+            >
+              <MenuItem value="active">Active</MenuItem>
+              <MenuItem value="inactive">Inactive</MenuItem>
+            </Select>
+          </FormControl>
           <TextField
             fullWidth
             label="Feedback"
