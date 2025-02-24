@@ -205,8 +205,8 @@ export default function LeadPage() {
               displayEmpty
               sx={{ background: "#fff", borderRadius: 2 }}
             >
-              <MenuItem value="New">New</MenuItem>
-              <MenuItem value="Contacted">Contacted</MenuItem>
+              <MenuItem value="new">New</MenuItem>
+              <MenuItem value="contacted">Contacted</MenuItem>
             </Select>
           </FormControl>
           <Grid container justifyContent="flex-end" mt={3}>

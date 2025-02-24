@@ -17,6 +17,7 @@ import { Email, Phone, LocationOn } from "@mui/icons-material";
 import Layout from "../../layout/layout";
 import contactBg from "@/public/assets/images/contact.jpg";
 import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function Contact() {
   const [loading, setLoading] = useState(false);
@@ -119,124 +120,154 @@ export default function Contact() {
         <Grid container spacing={4} justifyContent="center">
           {/* Contact Details */}
           <Grid item xs={12} md={6}>
-            <Typography
-              variant="h4"
-              fontWeight="bold"
-              gutterBottom
-              fontFamily="var(--font-syne)"
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
             >
-              Get in Touch
-            </Typography>
-            <Typography
-              variant="body1"
-              sx={{ mb: 5 }}
-              fontFamily="var(--font-syne)"
-            >
-              Have any questions or inquiries? Feel free to reach out to us.
-            </Typography>
-            <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 4 }}>
-              <Email color="error" />
               <Typography
-                fontFamily="var(--font-syne)"
-                fontSize="20px"
+                variant="h4"
                 fontWeight="bold"
+                gutterBottom
+                fontFamily="var(--font-syne)"
               >
-                contact@stallcraft.in
+                Get in Touch
               </Typography>
-            </Box>
-            <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 4 }}>
-              <Phone color="error" />
               <Typography
+                variant="body1"
+                sx={{ mb: 5 }}
                 fontFamily="var(--font-syne)"
-                fontSize="20px"
-                fontWeight="bold"
               >
-                +91 9910-954-993
+                Have any questions or inquiries? Feel free to reach out to us.
               </Typography>
-            </Box>
-            <Box sx={{ display: "flex", gap: 2 }}>
-              <LocationOn color="error" />
-              <Typography
-                fontFamily="var(--font-syne)"
-                fontSize="18px"
-                fontWeight="bold"
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2, duration: 0.6 }}
               >
-                Plot No 69, First Floor, Ahinsa Khand 2, <br /> IndiraPuram,
-                Ghaziabad, <br /> Uttar Pradesh, 201014
-              </Typography>
-            </Box>
+                <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 4 }}>
+                  <Email color="error" />
+                  <Typography
+                    fontFamily="var(--font-syne)"
+                    fontSize="20px"
+                    fontWeight="bold"
+                  >
+                    contact@stallcraft.in
+                  </Typography>
+                </Box>
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4, duration: 0.6 }}
+              >
+                <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 4 }}>
+                  <Phone color="error" />
+                  <Typography
+                    fontFamily="var(--font-syne)"
+                    fontSize="20px"
+                    fontWeight="bold"
+                  >
+                    +91 9910-954-993
+                  </Typography>
+                </Box>
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.6, duration: 0.6 }}
+              >
+                <Box sx={{ display: "flex", gap: 2 }}>
+                  <LocationOn color="error" />
+                  <Typography
+                    fontFamily="var(--font-syne)"
+                    fontSize="18px"
+                    fontWeight="bold"
+                  >
+                    Plot No 69, First Floor, Ahinsa Khand 2, <br /> IndiraPuram,
+                    Ghaziabad, <br /> Uttar Pradesh, 201014
+                  </Typography>
+                </Box>
+              </motion.div>
+            </motion.div>
           </Grid>
 
           {/* Contact Form */}
           <Grid item xs={12} md={6}>
-            <Box
-              component="form"
-              onSubmit={handleSubmit}
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                gap: 3,
-                p: 4,
-                borderRadius: 3,
-                boxShadow: 2,
-                backgroundColor: "#f9f9f9",
-              }}
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
             >
-              <TextField
-                label="Your Name"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                variant="standard"
-                fullWidth
-                required
-              />
-              <TextField
-                label="Your Email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                type="email"
-                variant="standard"
-                fullWidth
-                required
-              />
-              <TextField
-                label="Your Phone"
-                name="phoneNo"
-                value={formData.phoneNo}
-                onChange={handleChange}
-                type="tel"
-                variant="standard"
-                fullWidth
-                required
-                inputProps={{ pattern: "[0-9]{10}" }}
-              />
-              <TextField
-                label="Message"
-                name="message"
-                value={formData.message}
-                onChange={handleChange}
-                multiline
-                rows={4}
-                variant="standard"
-                fullWidth
-                required
-              />
-              <Button
-                type="submit"
-                variant="contained"
-                size="large"
-                disabled={loading}
-                sx={{ borderRadius: 3 }}
+              <Box
+                component="form"
+                onSubmit={handleSubmit}
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 3,
+                  p: 4,
+                  borderRadius: 3,
+                  boxShadow: 2,
+                  backgroundColor: "#f9f9f9",
+                }}
               >
-                {loading ? (
-                  <CircularProgress size={24} color="inherit" />
-                ) : (
-                  "Send Message"
-                )}
-              </Button>
-            </Box>
+                <TextField
+                  label="Your Name"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  variant="standard"
+                  fullWidth
+                  required
+                />
+                <TextField
+                  label="Your Email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  type="email"
+                  variant="standard"
+                  fullWidth
+                  required
+                />
+                <TextField
+                  label="Your Phone"
+                  name="phoneNo"
+                  value={formData.phoneNo}
+                  onChange={handleChange}
+                  type="tel"
+                  variant="standard"
+                  fullWidth
+                  required
+                  inputProps={{ pattern: "[0-9]{10}" }}
+                />
+                <TextField
+                  label="Message"
+                  name="message"
+                  value={formData.message}
+                  onChange={handleChange}
+                  multiline
+                  rows={4}
+                  variant="standard"
+                  fullWidth
+                  required
+                />
+                <Button
+                  type="submit"
+                  variant="contained"
+                  size="large"
+                  disabled={loading}
+                  sx={{ borderRadius: 3 }}
+                >
+                  {loading ? (
+                    <CircularProgress size={24} color="inherit" />
+                  ) : (
+                    "Send Message"
+                  )}
+                </Button>
+              </Box>
+            </motion.div>
           </Grid>
         </Grid>
       </Container>
@@ -252,16 +283,27 @@ export default function Contact() {
       </Box>
 
       {/* Success Toast */}
-      <Snackbar
-        open={open}
-        autoHideDuration={3000}
-        onClose={() => setOpen(false)}
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
-      >
-        <Alert onClose={() => setOpen(false)} severity="success">
-          Message sent successfully!
-        </Alert>
-      </Snackbar>
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+          >
+            <Snackbar
+              open={open}
+              autoHideDuration={3000}
+              onClose={() => setOpen(false)}
+              anchorOrigin={{ vertical: "top", horizontal: "right" }}
+            >
+              <Alert onClose={() => setOpen(false)} severity="success">
+                Message sent successfully!
+              </Alert>
+            </Snackbar>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </Layout>
   );
 }

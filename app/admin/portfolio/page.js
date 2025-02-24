@@ -318,7 +318,9 @@ export default function PortfolioPage() {
               <MenuItem value="inactive">Inactive</MenuItem>
             </Select>
           </FormControl>
-
+           <Typography mt={1} mb={1} color="green">
+              Image should be 600x400 pixels...
+            </Typography>
           {/* Image Preview */}
           {preview && (
             <Card sx={{ mt: 2, mb: 2 }}>

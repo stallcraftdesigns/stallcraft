@@ -299,6 +299,9 @@ export default function BrandsPage() {
               <MenuItem value="inactive">Inactive</MenuItem>
             </Select>
           </FormControl>
+            <Typography mt={1} mb={1} color="green">
+              Image should be 250x100 pixels...
+            </Typography>
           {preview && (
             <Card sx={{ mt: 2, mb: 2 }}>
               <CardMedia component="img" height="200" image={preview} alt="Preview" />

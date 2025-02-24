@@ -23,50 +23,43 @@ import {
   Modal,
   Box,
   TextField,
-  Card,
-  CardMedia,
   InputLabel,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { FaRegEdit } from "react-icons/fa";
 import { RiDeleteBin6Line } from "react-icons/ri";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 export default function TestimonialsPage() {
   const [testimonials, setTestimonials] = useState([]);
   const [filteredTestimonials, setFilteredTestimonials] = useState([]);
   const [loading, setLoading] = useState({
-    get: false, // Loading state for fetching testimonials
-    add: false, // Loading state for adding a testimonial
-    update: false, // Loading state for updating a testimonial
-    delete: false, // Loading state for deleting a testimonial
-    toggleVisibility: false, // Loading state for toggling visibility
+    get: false,
+    add: false,
+    update: false,
+    delete: false,
   });
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState(false);
   const [selectedTestimonial, setSelectedTestimonial] = useState(null);
   const [name, setName] = useState("");
-  const [status, setStatus] = useState("active")
-  const [feedback, setFeedback] = useState("");
-  const [image, setImage] = useState(null);
-  const [preview, setPreview] = useState("");
-  const [deleteId, setDeleteId] = useState(null);
+  const [email, setEmail] = useState("");
+  const [phoneNo, setPhoneNo] = useState("");
+  const [status, setStatus] = useState("active");
+  const [message, setMessage] = useState("");
   const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
-  const [filter, setFilter] = useState("all"); // Filter state for status
-
+  const [filter, setFilter] = useState("all");
 
   // Fetch testimonials from API
   const fetchTestimonials = async () => {
     try {
-      setLoading((prev) => ({ ...prev, get: true })); // Set GET loading state
+      setLoading((prev) => ({ ...prev, get: true }));
       const response = await fetch("/api/routes/testimonials");
       const data = await response.json();
       setTestimonials(data.data || []);
     } catch (error) {
       setSnackbar({ open: true, message: "Failed to fetch testimonials", severity: "error" });
     } finally {
-      setLoading((prev) => ({ ...prev, get: false })); // Reset GET loading state
+      setLoading((prev) => ({ ...prev, get: false }));
     }
   };
 
@@ -75,12 +68,12 @@ export default function TestimonialsPage() {
     fetchTestimonials();
   }, []);
 
-  // Fetch testimonials on component mount
+  // Filter testimonials based on status
   useEffect(() => {
     if (filter === "all") {
       setFilteredTestimonials(testimonials);
     } else {
-      setFilteredTestimonials(testimonials?.filter((testimonial) => testimonial.status === filter));
+      setFilteredTestimonials(testimonials.filter((testimonial) => testimonial.status === filter));
     }
   }, [filter, testimonials]);
 
@@ -89,10 +82,10 @@ export default function TestimonialsPage() {
     setEditing(!!testimonial);
     setSelectedTestimonial(testimonial);
     setName(testimonial ? testimonial.name : "");
+    setEmail(testimonial ? testimonial.email : "");
+    setPhoneNo(testimonial ? testimonial.phoneNo : "");
     setStatus(testimonial ? testimonial.status : "active");
-    setFeedback(testimonial ? testimonial.feedback : "");
-    setPreview(testimonial ? testimonial.image : "");
-    setImage(null);
+    setMessage(testimonial ? testimonial.message : "");
     setOpen(true);
   };
 
@@ -100,34 +93,24 @@ export default function TestimonialsPage() {
   const handleClose = () => {
     setOpen(false);
     setName("");
-    setStatus("");
-    setFeedback("");
-    setPreview("");
-    setImage(null);
-  };
-
-  // Handle Image Upload
-  const handleImageChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => setPreview(reader.result);
-      reader.readAsDataURL(file);
-      setImage(file);
-    }
+    setEmail("");
+    setPhoneNo("");
+    setStatus("active");
+    setMessage("");
   };
 
   // Add or Edit Testimonial
   const handleSubmit = async () => {
     const isEditing = editing && selectedTestimonial;
     try {
-      setLoading((prev) => ({ ...prev, [isEditing ? "update" : "add"]: true })); // Set ADD/UPDATE loading state
+      setLoading((prev) => ({ ...prev, [isEditing ? "update" : "add"]: true }));
 
       const formData = new FormData();
       formData.append("name", name);
+      formData.append("email", email);
+      formData.append("phoneNo", phoneNo);
       formData.append("status", status);
-      formData.append("feedback", feedback);
-      if (image) formData.append("image", image);
+      formData.append("message", message);
 
       const response = await fetch(
         isEditing ? `/api/routes/testimonials/${selectedTestimonial.id}` : "/api/routes/testimonials",
@@ -149,14 +132,14 @@ export default function TestimonialsPage() {
     } catch (error) {
       setSnackbar({ open: true, message: "Operation failed", severity: "error" });
     } finally {
-      setLoading((prev) => ({ ...prev, [isEditing ? "update" : "add"]: false })); // Reset ADD/UPDATE loading state
+      setLoading((prev) => ({ ...prev, [isEditing ? "update" : "add"]: false }));
     }
   };
 
   // Delete Testimonial
   const handleDelete = async (id) => {
     try {
-      setLoading((prev) => ({ ...prev, delete: true })); // Set DELETE loading state
+      setLoading((prev) => ({ ...prev, delete: true }));
 
       const response = await fetch(`/api/routes/testimonials/${id}`, {
         method: "DELETE",
@@ -173,10 +156,9 @@ export default function TestimonialsPage() {
     } catch (error) {
       setSnackbar({ open: true, message: "Delete failed", severity: "error" });
     } finally {
-      setLoading((prev) => ({ ...prev, delete: false })); // Reset DELETE loading state
+      setLoading((prev) => ({ ...prev, delete: false }));
     }
   };
-
 
   return (
     <Container maxWidth="lg" sx={{ mt: 4 }}>
@@ -213,7 +195,7 @@ export default function TestimonialsPage() {
               variant="contained"
               startIcon={<AddIcon />}
               onClick={() => handleOpen()}
-              disabled={loading.get || loading.add || loading.update || loading.delete || loading.toggleVisibility} // Disable button during any loading state
+              disabled={loading.get || loading.add || loading.update || loading.delete}
             >
               Add Testimonial
             </Button>
@@ -237,8 +219,10 @@ export default function TestimonialsPage() {
             <TableHead>
               <TableRow sx={{ backgroundColor: "#333" }}>
                 <TableCell sx={{ color: "white", fontWeight: "bold" }}>Name</TableCell>
+                <TableCell sx={{ color: "white", fontWeight: "bold" }}>Email</TableCell>
+                <TableCell sx={{ color: "white", fontWeight: "bold" }}>Phone</TableCell>
                 <TableCell sx={{ color: "white", fontWeight: "bold" }}>Status</TableCell>
-                <TableCell sx={{ color: "white", fontWeight: "bold" }}>Feedback</TableCell>
+                <TableCell sx={{ color: "white", fontWeight: "bold" }}>Message</TableCell>
                 <TableCell sx={{ color: "white", fontWeight: "bold" }}>Actions</TableCell>
               </TableRow>
             </TableHead>
@@ -246,25 +230,27 @@ export default function TestimonialsPage() {
               {filteredTestimonials.map((testimonial, index) => (
                 <TableRow
                   key={testimonial.id}
-                  sx={{
-                    backgroundColor: index % 2 === 0 ? "#f4f4f4" : "#e0e0e0",
-                  }}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
                 >
                   <TableCell sx={{ fontSize: "1.1rem", fontWeight: "500" }}>{testimonial.name}</TableCell>
+                  <TableCell sx={{ fontSize: "1.1rem", fontWeight: "500" }}>{testimonial.email}</TableCell>
+                  <TableCell sx={{ fontSize: "1.1rem", fontWeight: "500" }}>{testimonial.phoneNo}</TableCell>
                   <TableCell sx={{ fontSize: "1.1rem", fontWeight: "500" }}>{testimonial.status}</TableCell>
-                  <TableCell sx={{ fontSize: "1.1rem", fontWeight: "500" }}>{testimonial.feedback}</TableCell>
+                  <TableCell sx={{ fontSize: "1.1rem", fontWeight: "500" }}>{testimonial.message}</TableCell>
                   <TableCell>
                     <IconButton
                       color="primary"
                       onClick={() => handleOpen(testimonial)}
-                      disabled={loading.get || loading.add || loading.update || loading.delete || loading.toggleVisibility} // Disable button during any loading state
+                      disabled={loading.get || loading.add || loading.update || loading.delete}
                     >
                       <FaRegEdit />
                     </IconButton>
                     <IconButton
                       color="error"
                       onClick={() => handleDelete(testimonial.id)}
-                      disabled={loading.get || loading.add || loading.update || loading.delete || loading.toggleVisibility} // Disable button during any loading state
+                      disabled={loading.get || loading.add || loading.update || loading.delete}
                     >
                       <RiDeleteBin6Line />
                     </IconButton>
@@ -295,47 +281,61 @@ export default function TestimonialsPage() {
             {editing ? "Edit Testimonial" : "Add Testimonial"}
           </Typography>
 
-          <TextField
-            fullWidth
-            label="Name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            margin="normal"
-          />
-          <FormControl fullWidth>
-            <InputLabel id="status-label">Status</InputLabel>
-            <Select
-              value={status}
-              onChange={(e) => setStatus(e.target.value)}
-              label="Status"
-              margin="normal"
-            >
-              <MenuItem value="active">Active</MenuItem>
-              <MenuItem value="inactive">Inactive</MenuItem>
-            </Select>
-          </FormControl>
-          <TextField
-            fullWidth
-            label="Feedback"
-            value={feedback}
-            onChange={(e) => setFeedback(e.target.value)}
-            margin="normal"
-            multiline
-            rows={3}
-          />
+          <Grid container spacing={2}>
+            <Grid item xs={12} md={6}>
+              <TextField
+                fullWidth
+                label="Name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                margin="normal"
+              />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <TextField
+                fullWidth
+                label="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                margin="normal"
+              />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <TextField
+                fullWidth
+                label="Phone"
+                value={phoneNo}
+                onChange={(e) => setPhoneNo(e.target.value)}
+                margin="normal"
+              />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <FormControl fullWidth margin="normal">
+                <InputLabel id="status-label">Status</InputLabel>
+                <Select
+                  value={status}
+                  onChange={(e) => setStatus(e.target.value)}
+                  label="Status"
+                >
+                  <MenuItem value="active">Active</MenuItem>
+                  <MenuItem value="inactive">Inactive</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                label="Message"
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                margin="normal"
+                multiline
+                rows={3}
+              />
+            </Grid>
+          </Grid>
 
-          {preview && (
-            <Card sx={{ mt: 2, mb: 2 }}>
-              <CardMedia component="img" height="200" image={preview} alt="Preview" />
-            </Card>
-          )}
-
-          <Button variant="contained" component="label" fullWidth sx={{ mb: 2 }}>
-            Upload Image
-            <input type="file" hidden onChange={handleImageChange} />
-          </Button>
-
-          <Grid container justifyContent="flex-end">
+          <Grid container justifyContent="flex-end" mt={2}>
             <Button onClick={handleClose} color="error" sx={{ mr: 2 }}>
               Cancel
             </Button>
@@ -343,7 +343,7 @@ export default function TestimonialsPage() {
               onClick={handleSubmit}
               variant="contained"
               color="primary"
-              disabled={loading.add || loading.update} // Disable button during ADD/UPDATE loading state
+              disabled={loading.add || loading.update}
             >
               {loading.add || loading.update ? <CircularProgress size={24} /> : editing ? "Update" : "Add"}
             </Button>

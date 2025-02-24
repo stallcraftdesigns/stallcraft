@@ -31,6 +31,7 @@ export default function Footer() {
         py: 6,
         px: { xs: 4, md: 10 },
         fontFamily: "var(--font-syne)",
+        boxShadow: "0px -2px 10px rgba(0, 0, 0, 0.1)", // Subtle shadow
       }}
       className={syneFont.variable}
     >
@@ -39,11 +40,11 @@ export default function Footer() {
           {/* Left: Logo & About */}
           <Grid item xs={12} md={3}>
             <Link href="/" underline="none">
-              <Image src={logo} alt="Logo" width={180} height={90} />
+              <Image src={logo} alt="Logo" width={180} height={160} />
             </Link>
             <Typography
-              fontSize={20}
-              sx={{ mt: 2, color: "#555" }}
+              fontSize={18}
+              sx={{ mt: 2, color: "#555", lineHeight: 1.6 }}
               fontFamily="var(--font-syne)"
             >
               Elevating digital experiences with innovative design and
@@ -54,9 +55,9 @@ export default function Footer() {
           {/* Center: Quick Links */}
           <Grid item xs={12} md={3}>
             <Typography
-              variant="h5"
+              variant="h6"
               fontWeight="bold"
-              sx={{ mb: 2 }}
+              sx={{ mb: 2, color: "#222" }}
               fontFamily="var(--font-syne)"
             >
               Quick Links
@@ -70,8 +71,8 @@ export default function Footer() {
             ].map((item) => (
               <Typography
                 key={item.name}
-                fontSize={18}
-                sx={{ mb: 1 }}
+                fontSize={16}
+                sx={{ mb: 1.5 }}
                 fontFamily="var(--font-syne)"
               >
                 <Link
@@ -92,9 +93,9 @@ export default function Footer() {
           {/* Center: Terms & Policies */}
           <Grid item xs={12} md={3}>
             <Typography
-              variant="h5"
+              variant="h6"
               fontWeight="bold"
-              sx={{ mb: 2 }}
+              sx={{ mb: 2, color: "#222" }}
               fontFamily="var(--font-syne)"
             >
               Legal
@@ -105,8 +106,8 @@ export default function Footer() {
             ].map((item) => (
               <Typography
                 key={item.name}
-                fontSize={18}
-                sx={{ mb: 1 }}
+                fontSize={16}
+                sx={{ mb: 1.5 }}
                 fontFamily="var(--font-syne)"
               >
                 <Link
@@ -129,22 +130,24 @@ export default function Footer() {
             <Typography
               variant="h6"
               fontWeight="bold"
-              sx={{ mb: 2 }}
+              sx={{ mb: 2, color: "#222" }}
               fontFamily="var(--font-syne)"
             >
               Follow Us
             </Typography>
-            <Box sx={{ display: "flex", gap: 1 }}>
+            <Box sx={{ display: "flex", gap: 2 }}>
               {[
-                { icon: FaFacebookF, href: "https://facebook.com" },
-                { icon: FaWhatsapp, href: "https://wa.me/919910954993" },
-                { icon: FaInstagram, href: "https://instagram.com" },
-              ].map(({ icon: Icon, href }, index) => (
+                { icon: FaFacebookF, href: "https://facebook.com", label: "Facebook" },
+                { icon: FaWhatsapp, href: "https://wa.me/919910954993", label: "WhatsApp" },
+                { icon: FaInstagram, href: "https://instagram.com", label: "Instagram" },
+              ].map(({ icon: Icon, href, label }, index) => (
                 <IconButton
                   key={index}
                   component="a"
                   href={href}
                   target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={label}
                   sx={{
                     bgcolor: "rgba(0, 123, 255, 0.1)",
                     color: "#333",
@@ -170,7 +173,7 @@ export default function Footer() {
         <Typography
           variant="body2"
           align="center"
-          sx={{ color: "#666" }}
+          sx={{ color: "#666", fontSize: 16 }}
           fontFamily="var(--font-syne)"
         >
           &copy; {new Date().getFullYear()} Stall Craft. All rights reserved.

@@ -2,10 +2,11 @@
 
 import { Box } from "@mui/material";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, Pagination } from "swiper/modules";
+import { Autoplay, Pagination, EffectFade } from "swiper/modules";
 import Image from "next/image";
 import "swiper/css";
 import "swiper/css/pagination";
+import "swiper/css/effect-fade";
 
 const carouselImages = [
   "https://dummyimage.com/1920x980/000/fff&text=Carousel+1",
@@ -26,8 +27,9 @@ const Carousel = () => {
       <Swiper
         autoplay={{ delay: 3000 }}
         loop
-        modules={[Autoplay, Pagination]}
+        modules={[Autoplay, Pagination, EffectFade]}
         pagination={{ clickable: true }}
+        effect="fade"
         className="custom-swiper"
       >
         {carouselImages.map((img, index) => (

@@ -1,5 +1,5 @@
 import Layout from "../../layout/layout";
-import { Box, Grid } from "@mui/material";
+import { Box } from "@mui/material";
 import Carousel from "./Carousel";
 import Brands from "./Brands";
 import Count from "./Count";

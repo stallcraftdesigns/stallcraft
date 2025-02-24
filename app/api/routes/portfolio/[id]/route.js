@@ -65,7 +65,7 @@ export async function PUT(req, { params }) {
             if (!existingPortfolio.image) {
                 console.warn("No old image URL found for replacement.");
             }
-            const imageUrl = await ReplaceImage(image, existingPortfolio.image, 800, 600);
+            const imageUrl = await ReplaceImage(image, existingPortfolio.image, 600, 400);
             updateData.image = imageUrl;
         } else {
             updateData.image = existingPortfolio.image; // Keep the existing image

@@ -56,7 +56,7 @@ export async function POST(req) {
         }
 
         // Upload image to Firebase Storage (800x600 for portfolios)
-        const imageUrl = await UploadImage(file, 800, 600);
+        const imageUrl = await UploadImage(file, 600, 400);
         consoleManager.log("✅ Portfolio image uploaded:", imageUrl);
 
         // Save portfolio data in Firestore

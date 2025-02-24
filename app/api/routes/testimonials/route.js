@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import TestimonialService from "../../services/testimonialServices";
 import consoleManager from "../../utils/consoleManager";
-import { UploadImage } from "../../controller/imageController";
 
 // Get all testimonials (GET)
 export async function GET(req) {
@@ -43,26 +42,25 @@ export async function POST(req) {
     try {
         const formData = await req.formData();
         const name = formData.get("name");
+        const email = formData.get("email");
+        const phoneNo = formData.get("phoneNo");
         const status = formData.get("status");
         const message = formData.get("message");
-        const file = formData.get("image");
 
-        if (!name || !message || !file) {
+        if (!name || !message) {
             return NextResponse.json({
                 statusCode: 400,
                 errorCode: "BAD_REQUEST",
-                errorMessage: "Name, message, and image are required",
+                errorMessage: "Name and message are required",
             }, { status: 400 });
         }
-
-        // Upload image to Firebase Storage
-        const imageUrl = await UploadImage(file, 150, 150);
 
         // Save testimonial in DB
         const newTestimonial = await TestimonialService.addTestimonial({
             name,
+            email,
+            phoneNo,
             message,
-            image: imageUrl,
             status,
         });
 

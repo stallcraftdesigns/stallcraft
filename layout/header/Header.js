@@ -16,6 +16,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
 import logo from "../../public/assets/images/logo.png";
 
 // Navigation Links
@@ -52,19 +53,36 @@ export default function Header() {
       <AppBar
         position="sticky"
         sx={{
-          bgcolor: "#fff",
+          bgcolor: "rgba(255, 255, 255, 0.9)", // Semi-transparent background
+          backdropFilter: "blur(10px)", // Blur effect
           color: "black",
           boxShadow: "none",
           px: { xs: 3, md: 8 },
           minHeight: "90px",
+          borderBottom: "1px solid rgba(0, 0, 0, 0.1)", // Subtle border
         }}
       >
-        <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
+        <Toolbar
+          sx={{
+            display: "flex",
+            justifyContent: "flex-end", // Align nav items to the right
+            alignItems: "center",
+            position: "relative",
+            minHeight: "90px",
+          }}
+        >
           {/* Logo Component */}
           <Logo />
 
           {/* Desktop Navigation */}
-          <Box sx={{ display: { xs: "none", md: "flex" } }}>
+          <Box
+            sx={{
+              display: { xs: "none", md: "flex" },
+              gap: 4,
+              alignItems: "center",
+              mt: 3,
+            }}
+          >
             <NavLinks pathname={pathname} />
           </Box>
 
@@ -74,7 +92,7 @@ export default function Header() {
             color="inherit"
             aria-label="menu"
             onClick={handleDrawerToggle}
-            sx={{ display: { md: "none" } }}
+            sx={{ display: { md: "none" }, position: "absolute", right: 16 }}
           >
             <MenuIcon />
           </IconButton>
@@ -93,21 +111,37 @@ export default function Header() {
 
 // Logo Component
 const Logo = () => (
-  <Box sx={{ display: "flex", alignItems: "center", mt: 1 }}>
+  <Box
+    sx={{
+      position: "absolute",
+      left: { xs: 12, md: 24 }, // Adjust left position for responsiveness
+      width: { xs: 170, md: 180 },
+      height: { xs: 150, md: 160 },
+      px: 2,
+      mt: 14,
+      py: 1,
+      bgcolor: "white",
+      boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)", // Subtle shadow
+      borderRadius: "8px",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      zIndex: 1,
+    }}
+  >
     <Link href="/" passHref>
-      <Image src={logo} alt="Logo" width={180} height={80} priority />
+      <Image src={logo} alt="Logo" width={160} height={140} priority />
     </Link>
   </Box>
 );
 
-// Navigation Links Component
+// Navigation Links Component with Hover Animation
 const NavLinks = ({ pathname }) => (
   <Box sx={{ display: "flex", gap: 4 }}>
     {navItems.map((item) => (
       <Link
         key={item.label}
         href={item.href}
-        passHref
         style={{
           textDecoration: "none",
           fontSize: "1.1rem",
@@ -115,45 +149,89 @@ const NavLinks = ({ pathname }) => (
           color: pathname === item.href ? "#007bff" : "black",
           transition: "color 0.3s ease",
           fontFamily: "var(--font-syne)",
+          position: "relative",
         }}
       >
         {item.label}
+        {pathname === item.href && (
+          <motion.div
+            style={{
+              position: "absolute",
+              bottom: -4,
+              left: 0,
+              width: "100%",
+              height: "2px",
+              backgroundColor: "#007bff",
+            }}
+            layoutId="underline" // Animated underline
+          />
+        )}
       </Link>
     ))}
   </Box>
 );
 
-// Mobile Drawer Component
+// Mobile Drawer Component with Animation
 const MobileMenu = ({ open, onClose, pathname }) => (
-  <Drawer anchor="right" open={open} onClose={onClose}>
-    <Box sx={{ width: 220, display: "flex", flexDirection: "column" }}>
-      {/* Close Button */}
-      <Box sx={{ display: "flex", justifyContent: "flex-end", p: 1 }}>
-        <IconButton onClick={onClose}>
-          <CloseIcon />
-        </IconButton>
-      </Box>
+  <AnimatePresence>
+    {open && (
+      <motion.div
+        initial={{ x: "100%" }}
+        animate={{ x: 0 }}
+        exit={{ x: "100%" }}
+        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+        style={{
+          position: "fixed",
+          top: 0,
+          right: 0,
+          height: "100vh",
+          zIndex: 1300,
+        }}
+      >
+        <Drawer
+          anchor="right"
+          open={open}
+          onClose={onClose}
+          sx={{
+            "& .MuiDrawer-paper": {
+              width: 220,
+              boxShadow: 3,
+              bgcolor: "rgba(255, 255, 255, 0.9)", // Semi-transparent background
+              backdropFilter: "blur(10px)", // Blur effect
+            },
+          }}
+        >
+          <Box sx={{ width: 220, display: "flex", flexDirection: "column" }}>
+            {/* Close Button */}
+            <Box sx={{ display: "flex", justifyContent: "flex-end", p: 1 }}>
+              <IconButton onClick={onClose}>
+                <CloseIcon />
+              </IconButton>
+            </Box>
 
-      {/* Navigation Links */}
-      <List>
-        {navItems.map((item) => (
-          <ListItem key={item.label} disablePadding>
-            <ListItemButton
-              component={Link}
-              href={item.href}
-              onClick={onClose}
-              sx={{
-                fontWeight: "bold",
-                fontSize: "1rem",
-                color: pathname === item.href ? "#007bff" : "black",
-                "&:hover": { bgcolor: "#f1f1f1" },
-              }}
-            >
-              {item.label}
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-    </Box>
-  </Drawer>
+            {/* Navigation Links */}
+            <List>
+              {navItems.map((item) => (
+                <ListItem key={item.label} disablePadding>
+                  <ListItemButton
+                    component={Link}
+                    href={item.href}
+                    onClick={onClose}
+                    sx={{
+                      fontWeight: "bold",
+                      fontSize: "1rem",
+                      color: pathname === item.href ? "#007bff" : "black",
+                      "&:hover": { bgcolor: "#f1f1f1" },
+                    }}
+                  >
+                    {item.label}
+                  </ListItemButton>
+                </ListItem>
+              ))}
+            </List>
+          </Box>
+        </Drawer>
+      </motion.div>
+    )}
+  </AnimatePresence>
 );

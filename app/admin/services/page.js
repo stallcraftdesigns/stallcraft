@@ -334,6 +334,10 @@ export default function ServicesPage() {
             </Grid>
           </Grid>
 
+           <Typography mt={1} mb={1} color="green">
+               Image should be 600x400 pixels...
+           </Typography>
+
           {preview && (
             <Card sx={{ mt: 2 }}>
               <CardMedia component="img" height="150" image={preview} />

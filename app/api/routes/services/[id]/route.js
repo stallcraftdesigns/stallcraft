@@ -68,7 +68,7 @@ export async function PUT(req, { params }) {
             if (!existingService.image) {
                 console.warn("No old image URL found for replacement.");
             }
-            const imageUrl = await ReplaceImage(image, existingService.image, 500, 350);
+            const imageUrl = await ReplaceImage(image, existingService.image, 600, 400);
             updateData.image = imageUrl;
         } else {
             updateData.image = existingService.image;

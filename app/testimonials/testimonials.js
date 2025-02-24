@@ -17,25 +17,24 @@ import {
 } from "@mui/material";
 import Layout from "../../layout/layout";
 import testimonialsBg from "@/public/assets/images/testimonials.jpg";
-import Image from "next/image";
+import { motion } from "framer-motion";
 
+// Dummy Testimonials Data
 const testimonials = Array.from({ length: 9 }, (_, i) => ({
+  id: i + 1,
   name: `Person ${i + 1}`,
   position: "Satisfied Client",
-  message: "Great service! Highly recommended.",
-  image: `https://dummyimage.com/200x200/007bff/fff&text=Image+${i + 1}`, // Fixed size
+  message: "Great service! Highly recommended. The team was professional and delivered beyond expectations.",
+  status: "active", // Default status for dummy data
 }));
 
 export default function TestimonialsPage() {
   const [newTestimonial, setNewTestimonial] = useState({
     name: "",
     email: "",
-    phone: "",
-    position: "",
     message: "",
-    image: "",
+    status: "inactive", // New testimonials are inactive by default
   });
-  const [imageName, setImageName] = useState("No file chosen");
   const [errors, setErrors] = useState({});
   const [openSnackbar, setOpenSnackbar] = useState(false);
 
@@ -45,17 +44,9 @@ export default function TestimonialsPage() {
     setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setImageName(file.name);
-      setNewTestimonial({ ...newTestimonial, image: file });
-    }
-  };
-
   const validateForm = () => {
     let tempErrors = {};
-    ["name", "email", "phone", "position", "message"].forEach((field) => {
+    ["name", "email", "message"].forEach((field) => {
       if (!newTestimonial[field].trim())
         tempErrors[field] = "This field is required";
     });
@@ -66,16 +57,20 @@ export default function TestimonialsPage() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!validateForm()) return;
+
+    // Simulate saving the testimonial (e.g., API call)
+    console.log("New Testimonial:", newTestimonial);
+
+    // Show success message
     setOpenSnackbar(true);
+
+    // Reset form
     setNewTestimonial({
       name: "",
       email: "",
-      phone: "",
-      position: "",
       message: "",
-      image: "",
+      status: "inactive",
     });
-    setImageName("No file chosen");
   };
 
   return (
@@ -108,76 +103,88 @@ export default function TestimonialsPage() {
             backgroundColor: "rgba(0, 0, 0, 0.5)",
           }}
         />
-        <Box sx={{ position: "relative", zIndex: 2, textAlign: "center" }}>
-          <Typography
-            variant="h3"
-            fontWeight="bold"
-            fontFamily="var(--font-syne)"
-          >
-            What Our Clients Say
-          </Typography>
-          <Breadcrumbs
-            sx={{
-              color: "white",
-              justifyContent: "center",
-              display: "flex",
-              mt: 1,
-            }}
-          >
-            <Link href="/" underline="hover" color="inherit">
-              Home
-            </Link>
-            <Typography color="white" fontFamily="var(--font-syne)">
-              Testimonials
+          <Box sx={{ position: "relative", zIndex: 2, textAlign: "center" }}>
+            <Typography variant="h3" fontWeight="bold" fontFamily="var(--font-syne)">
+              What Our Clients Say
             </Typography>
-          </Breadcrumbs>
-        </Box>
+            <Breadcrumbs
+              sx={{
+                color: "white",
+                justifyContent: "center",
+                display: "flex",
+                mt: 1,
+              }}
+            >
+              <Link href="/" underline="hover" color="inherit">
+                Home
+              </Link>
+              <Typography color="white" fontFamily="var(--font-syne)">
+                Testimonials
+              </Typography>
+            </Breadcrumbs>
+          </Box>
       </Box>
 
+      {/* Testimonials Grid */}
       <Container sx={{ py: 10, width: "90%", fontFamily: "var(--font-syne)" }}>
         <Grid container spacing={4} justifyContent="center">
           {testimonials.map((testimonial, index) => (
-            <Grid item xs={12} md={4} key={index}>
-              <Card
-                sx={{
-                  p: 3,
-                  textAlign: "center",
-                  boxShadow: 3,
-                  borderRadius: 3,
-                }}
+            <Grid item xs={12} md={4} key={testimonial.id}>
+              <motion.div
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
               >
-                <Image
-                  src={testimonial.image}
-                  alt={testimonial.name}
-                  width={200}
-                  height="150"
-                />
-                <CardContent>
-                  <Typography
-                    variant="h6"
-                    fontWeight="bold"
-                    gutterBottom
-                    fontFamily="var(--font-syne)"
-                  >
-                    {testimonial.name}
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    color="grey.600"
-                    gutterBottom
-                    fontFamily="var(--font-syne)"
-                  >
-                    {testimonial.position}
-                  </Typography>
-                  <Typography
-                    variant="body1"
-                    color="grey.800"
-                    fontFamily="var(--font-syne)"
-                  >
-                    "{testimonial.message}"
-                  </Typography>
-                </CardContent>
-              </Card>
+                <Card
+                  sx={{
+                    p: 3,
+                    textAlign: "center",
+                    borderRadius: 3,
+                    background: "linear-gradient(135deg, #f0f4f8, #e0e6f0)",
+                    boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
+                    transition: "transform 0.3s, box-shadow 0.3s",
+                    "&:hover": {
+                      transform: "translateY(-10px)",
+                      boxShadow: "0 10px 20px rgba(0, 0, 0, 0.2)",
+                    },
+                  }}
+                >
+                  <CardContent>
+                    <Typography
+                      variant="h4"
+                      fontWeight="bold"
+                      gutterBottom
+                      fontFamily="var(--font-syne)"
+                      sx={{ color: "#007bff" }}
+                    >
+                      “
+                    </Typography>
+                    <Typography
+                      variant="body1"
+                      color="grey.800"
+                      fontFamily="var(--font-syne)"
+                      sx={{ mb: 3, fontSize: "1.1rem", fontStyle: "italic" }}
+                    >
+                      {testimonial.message}
+                    </Typography>
+                    <Typography
+                      variant="h6"
+                      fontWeight="bold"
+                      gutterBottom
+                      fontFamily="var(--font-syne)"
+                    >
+                      {testimonial.name}
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      color="grey.600"
+                      fontFamily="var(--font-syne)"
+                    >
+                      {testimonial.position}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </motion.div>
             </Grid>
           ))}
         </Grid>
@@ -191,6 +198,7 @@ export default function TestimonialsPage() {
               maxWidth: 800,
               boxShadow: 1,
               borderRadius: 2,
+              background: "#f9f9f9",
             }}
           >
             <Typography
@@ -246,35 +254,6 @@ export default function TestimonialsPage() {
                   sx={{ borderBottom: "1px solid #ccc", pb: 1 }}
                 />
               </Grid>
-              <Grid item xs={12} sm={6} display="flex" flexDirection="column">
-                <Button
-                  variant="outlined"
-                  sx={{
-                    height: 45,
-                    textTransform: "none",
-                    fontSize: 16,
-                    borderRadius: 2,
-                    color: "black",
-                    borderColor: "#aaa",
-                  }}
-                  onClick={() => document.getElementById("fileInput").click()}
-                >
-                  Upload Image
-                </Button>
-                <Typography
-                  variant="body2"
-                  sx={{ mt: 1, color: "gray", textAlign: "center" }}
-                >
-                  {imageName || "No file chosen"}
-                </Typography>
-              </Grid>
-              <input
-                id="fileInput"
-                type="file"
-                hidden
-                accept="image/*"
-                onChange={handleImageUpload}
-              />
               <Grid item xs={12}>
                 <TextField
                   fullWidth
@@ -303,6 +282,7 @@ export default function TestimonialsPage() {
                     color: "white",
                     "&:hover": { backgroundColor: "#555" },
                   }}
+                  onClick={handleSubmit}
                 >
                   Submit
                 </Button>
@@ -311,6 +291,18 @@ export default function TestimonialsPage() {
           </Card>
         </Box>
       </Container>
+
+      {/* Success Snackbar */}
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={3000}
+        onClose={() => setOpenSnackbar(false)}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      >
+        <Alert onClose={() => setOpenSnackbar(false)} severity="success">
+          Testimonial submitted successfully!
+        </Alert>
+      </Snackbar>
     </Layout>
   );
 }

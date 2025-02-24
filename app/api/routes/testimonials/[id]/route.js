@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import TestimonialService from "../../../services/testimonialServices";
 import consoleManager from "../../../utils/consoleManager";
-import { ReplaceImage } from "../../../controller/imageController";
 
 // Get a single testimonial by ID (GET)
 export async function GET(req, { params }) {
@@ -44,11 +43,17 @@ export async function PUT(req, { params }) {
 
         let updateData = {};
         const title = formData.get("title");
-        const image = formData.get("image");
+        const email = formData.get("email");
+        const phoneNo = formData.get("phoneNo");
+        const message = formData.get("message");
         const status = formData.get("status");
 
         if (title) updateData.title = title;    
         if (status) updateData.status = status;
+        if (email) updateData.email = email;
+        if (phoneNo) updateData.phoneNo = phoneNo;
+        if (message) updateData.message = message;
+    
 
         const existingTestimonial = await TestimonialService.getTestimonialById(id);
         if (!existingTestimonial) {
@@ -57,16 +62,6 @@ export async function PUT(req, { params }) {
                 errorCode: "NOT_FOUND",
                 errorMessage: "Testimonial not found",
             }, { status: 404 });
-        }
-
-        if (image) {
-            if (!existingTestimonial.image) {
-                console.warn("No old image URL found for replacement.");
-            }
-            const imageUrl = await ReplaceImage(image, existingTestimonial.image, 200, 100);
-            updateData.image = imageUrl;
-        } else {
-            updateData.image = existingTestimonial.image;
         }
 
         const updatedTestimonial = await TestimonialService.updateTestimonial(id, updateData);
@@ -102,10 +97,6 @@ export async function DELETE(req, { params }) {
                 errorCode: "NOT_FOUND",
                 errorMessage: "Testimonial not found",
             }, { status: 404 });
-        }
-
-        if (existingTestimonial.image) {
-            await ReplaceImage(null, existingTestimonial.image, 0, 0);
         }
 
         await TestimonialService.deleteTestimonial(id);

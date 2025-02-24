@@ -57,7 +57,7 @@ export async function POST(req) {
         }
 
         // Upload image to Firebase Storage
-        const imageUrl = await UploadImage(image, 500, 350);
+        const imageUrl = await UploadImage(image, 600, 400);
 
         // Save service in DB
         const newService = await ServiceService.addService({ name, image: imageUrl, status, shortDescription, longDescription });
