@@ -125,7 +125,7 @@ export default function ServicesPage() {
             color="textSecondary"
             sx={{ fontFamily: "var(--font-syne)", maxWidth: "90%", margin: "0 auto" }}
           >
-            Stall Craft specializes in providing premium exhibition and fair solutions, including custom-built stalls,
+            StallCraft Designs specializes in providing premium exhibition and fair solutions, including custom-built stalls,
             country pavilions, interior and exterior designs, and mezzanine stands. Our expertise ensures that your
             brand stands out in any event, creating engaging experiences for visitors while optimizing space and
             functionality.

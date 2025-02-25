@@ -56,7 +56,7 @@ export default function Terms() {
             Introduction
           </Typography>
           <Typography fontSize={20} sx={{ fontFamily: "var(--font-syne)", color: "grey.700", mb: 5 }}>
-            Welcome to Stall Craft. These Terms & Conditions govern your use of our website and services. By accessing our site,
+            Welcome to StallCraft Designs. These Terms & Conditions govern your use of our website and services. By accessing our site,
             you agree to comply with these terms. If you do not agree, please do not use our services.
           </Typography>
         </motion.div>

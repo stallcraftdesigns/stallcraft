@@ -47,8 +47,7 @@ export default function Footer() {
               sx={{ mt: 2, color: "#555", lineHeight: 1.6 }}
               fontFamily="var(--font-syne)"
             >
-              Elevating digital experiences with innovative design and
-              technology.
+              From Concept to Reality – <br /> We Build, You Shine
             </Typography>
           </Grid>
 
@@ -137,29 +136,27 @@ export default function Footer() {
             </Typography>
             <Box sx={{ display: "flex", gap: 2 }}>
               {[
-                { icon: FaFacebookF, href: "https://facebook.com", label: "Facebook" },
-                { icon: FaWhatsapp, href: "https://wa.me/919910954993", label: "WhatsApp" },
-                { icon: FaInstagram, href: "https://instagram.com", label: "Instagram" },
-              ].map(({ icon: Icon, href, label }, index) => (
+                { icon: FaFacebookF, color: "#1877F2", href: "https://www.facebook.com/share/1AZexmgig9/?mibextid=wwXIfr" },
+                { icon: FaWhatsapp, color: "#25D366", href: "https://wa.me/919910954993" }, // Replace with actual number
+                { icon: FaInstagram, color: "#E4405F", href: "https://www.instagram.com/stallcraftdesigns" },
+              ].map(({ icon: Icon, href, color }, index) => (
                 <IconButton
                   key={index}
                   component="a"
                   href={href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label={label}
                   sx={{
-                    bgcolor: "rgba(0, 123, 255, 0.1)",
-                    color: "#333",
+                    color: {color},
                     transition: "all 0.3s ease",
                     "&:hover": {
-                      bgcolor: "#007BFF",
-                      color: "#fff",
-                      boxShadow: "0px 0px 10px rgba(0, 123, 255, 0.4)",
+                      color: {color},
+                      transform: "scale(1.3)",
+                      cursor: "pointer",
                     },
                   }}
                 >
-                  <Icon size={20} />
+                  <Icon size={24} />
                 </IconButton>
               ))}
             </Box>
@@ -171,12 +168,12 @@ export default function Footer() {
 
         {/* Bottom: Copyright */}
         <Typography
-          variant="body2"
+          variant="body1"
           align="center"
-          sx={{ color: "#666", fontSize: 16 }}
+          sx={{ color: "#666", fontSize: 18 }}
           fontFamily="var(--font-syne)"
         >
-          &copy; {new Date().getFullYear()} Stall Craft. All rights reserved.
+          &copy; {new Date().getFullYear()} StallCraft Designs. All rights reserved.
         </Typography>
       </Container>
     </Box>

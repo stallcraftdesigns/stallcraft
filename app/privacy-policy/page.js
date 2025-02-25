@@ -56,7 +56,7 @@ export default function PrivacyPolicy() {
             Introduction
           </Typography>
           <Typography fontSize={20} sx={{ fontFamily: "var(--font-syne)", color: "grey.700", mb: 5 }}>
-            Welcome to Stall Craft’s Privacy Policy. We take your privacy seriously and are committed to protecting your personal data.
+            Welcome to StallCraft’s Designs Privacy Policy. We take your privacy seriously and are committed to protecting your personal data.
             This page outlines what information we collect, how we use it, and how we ensure its confidentiality.
             By using our website, you agree to the terms of this policy.
           </Typography>

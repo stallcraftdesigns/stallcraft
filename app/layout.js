@@ -6,8 +6,8 @@ import CookieBanner from "./CookieConsent";
 import ScrollToTop from "./ScrollToTop";
 
 export const metadata = {
-  title: "Stall Craft Designs",
-  description: "Express the design in a unique manner",
+  title: "StallCraft Designs",
+  description: "Experience the art of Exhibition",
   icon: "/favicon.ico"
 };
 

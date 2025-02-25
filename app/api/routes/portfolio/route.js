@@ -9,6 +9,7 @@ export async function GET(req) {
         // Extract query parameters
         const { searchParams } = new URL(req.url);
         const status = searchParams.get("status");
+        const service = searchParams.get("service");
 
         let portfolios;
 
@@ -21,6 +22,10 @@ export async function GET(req) {
             consoleManager.log("Fetched all portfolios:", portfolios.length);
         }
 
+        // Filter by service if provided
+        if (service) {
+            portfolios = portfolios.filter(portfolio => portfolio.service === service);
+        }
 
         return NextResponse.json({
             statusCode: 200,
@@ -44,6 +49,7 @@ export async function POST(req) {
     try {
         const formData = await req.formData();
         const title = formData.get("title");
+        const service = formData.get("service");
         const file = formData.get("image");
         const status = formData.get("status");
 
@@ -64,6 +70,7 @@ export async function POST(req) {
             title,
             image: imageUrl,
             status,
+            service,
         });
 
         consoleManager.log("✅ Portfolio created successfully:", newPortfolio);

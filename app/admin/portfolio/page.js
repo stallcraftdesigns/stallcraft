@@ -46,6 +46,7 @@ export default function PortfolioPage() {
   const [selectedPortfolio, setSelectedPortfolio] = useState(null);
   const [title, setTitle] = useState("");
   const [status, setStatus] = useState("active"); // Default status
+  const [service, setService] = useState("customStand");
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState("");
   const [deleteId, setDeleteId] = useState(null);
@@ -88,6 +89,7 @@ export default function PortfolioPage() {
     setSelectedPortfolio(portfolio);
     setTitle(portfolio ? portfolio.title : "");
     setStatus(portfolio ? portfolio.status : "active"); // Default status
+    setService(portfolio ? portfolio.service : "customStand"); // Default service
     setPreview(portfolio ? portfolio.image : "");
     setImage(null);
     setOpen(true);
@@ -98,6 +100,7 @@ export default function PortfolioPage() {
     setOpen(false);
     setTitle("");
     setStatus(""); // Default status
+    setService(""); // Default service
     setPreview("");
     setImage(null);
   };
@@ -134,6 +137,7 @@ export default function PortfolioPage() {
       const formData = new FormData();
       formData.append("title", title);
       formData.append("status", status);
+      formData.append("service", service);
       if (image) formData.append("image", image);
 
       const response = await fetch(
@@ -244,6 +248,7 @@ export default function PortfolioPage() {
             <TableHead>
               <TableRow sx={{ backgroundColor: "#333" }}>
                 <TableCell sx={{ color: "white", fontWeight: "bold" }}>Title</TableCell>
+                <TableCell sx={{ color: "white", fontWeight: "bold" }}>Service</TableCell>
                 <TableCell sx={{ color: "white", fontWeight: "bold" }}>Status</TableCell>
                 <TableCell sx={{ color: "white", fontWeight: "bold" }}>Actions</TableCell>
               </TableRow>
@@ -257,6 +262,7 @@ export default function PortfolioPage() {
                   }}
                 >
                   <TableCell sx={{ fontSize: "1.1rem", fontWeight: "500" }}>{portfolio.title}</TableCell>
+                  <TableCell sx={{ fontSize: "1.1rem", fontWeight: "500" }}>{portfolio.service}</TableCell>
                   <TableCell sx={{ fontSize: "1.1rem", fontWeight: "500" }}>{portfolio.status}</TableCell>
                   <TableCell>
                     <IconButton
@@ -316,6 +322,20 @@ export default function PortfolioPage() {
             >
               <MenuItem value="active">Active</MenuItem>
               <MenuItem value="inactive">Inactive</MenuItem>
+            </Select>
+          </FormControl>
+          <FormControl fullWidth margin="normal">
+            <InputLabel id="service-label">Service</InputLabel>
+            <Select
+              value={service}
+              onChange={(e) => setService(e.target.value)}
+              label="Service"
+            >
+              <MenuItem value="customStand">Custom Stands</MenuItem>
+              <MenuItem value="mezzaineStand">Mezzanine Stands</MenuItem>
+              <MenuItem value="countryPavilion">Country Pavilion</MenuItem>
+              <MenuItem value="interiorExterior">Interior and Exterior Design</MenuItem>
+              <MenuItem value="other">Other</MenuItem>
             </Select>
           </FormControl>
            <Typography mt={1} mb={1} color="green">

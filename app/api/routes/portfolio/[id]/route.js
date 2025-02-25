@@ -46,9 +46,11 @@ export async function PUT(req, { params }) {
         const title = formData.get("title");
         const image = formData.get("image"); // File input
         const status = formData.get("status")
+        const service = formData.get("service")
 
         if (title) updateData.title = title;
         if (status) updateData.status = status; 
+        if (service) updateData.service = service;
 
         // Fetch existing portfolio to get old image URL
         const existingPortfolio = await PortfolioService.getPortfolioById(id);

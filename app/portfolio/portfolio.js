@@ -200,9 +200,8 @@ export default function PortfolioPage() {
                   <Image
                     src={selectedImage}
                     alt="Large Preview"
-                    width="auto"
-                    height="auto"
-                    style={{ maxWidth: "100%", height: "600px", borderRadius: "8px" }}
+                    width={600}
+                    height={400}
                   />
 
                   {/* Buttons Container */}

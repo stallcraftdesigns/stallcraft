@@ -18,6 +18,7 @@ import Layout from "../../layout/layout";
 import contactBg from "@/public/assets/images/contact.jpg";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { FaFacebookF, FaInstagram, FaWhatsapp } from "react-icons/fa";
 
 export default function Contact() {
   const [loading, setLoading] = useState(false);
@@ -60,6 +61,12 @@ export default function Contact() {
       setLoading(false);
     }
   };
+
+  const socialLinks = [
+    { icon: <FaFacebookF />, color: "#1877F2", link: "https://www.facebook.com/share/1AZexmgig9/?mibextid=wwXIfr" },
+    { icon: <FaWhatsapp />, color: "#25D366", link: "https://wa.me/919910954993" }, // Replace with actual number
+    { icon: <FaInstagram />, color: "#E4405F", link: "https://www.instagram.com/stallcraftdesigns" },
+  ];
 
   return (
     <Layout title="Contact">
@@ -187,6 +194,44 @@ export default function Contact() {
                     Plot No 69, First Floor, Ahinsa Khand 2, <br /> IndiraPuram,
                     Ghaziabad, <br /> Uttar Pradesh, 201014
                   </Typography>
+                </Box>
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.6, duration: 0.6 }}
+              >
+                <Box sx={{ display: "flex", alignItems: "center", gap: 4, mt: 3 }}>
+                  <Typography
+                    fontFamily="var(--font-syne)"
+                    fontSize={20}
+                    fontWeight="bold"
+                  >
+                    Social Links:
+                  </Typography>
+
+                  {socialLinks.map((item, index) => (
+                    <motion.a
+                      key={index}
+                      href={item.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ textDecoration: "none" }}
+                      whileHover={{ scale: 1.2, rotate: 5 }}
+                      whileTap={{ scale: 0.9 }}
+                      transition={{ type: "spring", stiffness: 300 }}
+                    >
+                      <motion.div
+                        style={{
+                          fontSize: 26,
+                          color: item.color,
+                          cursor: "pointer",
+                        }}
+                      >
+                        {item.icon}
+                      </motion.div>
+                    </motion.a>
+                  ))}
                 </Box>
               </motion.div>
             </motion.div>

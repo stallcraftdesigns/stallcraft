@@ -57,7 +57,7 @@ export default function About() {
               Who We Are
             </Typography>
             <Typography fontSize="20px" color="textSecondary" sx={{ fontFamily: "var(--font-syne)", maxWidth: "100%", margin: "0 auto" }}>
-              Stall Craft is a leading, dynamic provider of customized exhibition solutions, offering a diverse range of services tailored for the global exhibition industry. With an expert team of creative designers and skilled professionals, we transform ideas into reality with precision and innovation. Our strength lies in creating unique, standout exhibition stands that help brands make an impact at trade shows and events worldwide. From concept to execution, we offer high-quality, cost-effective services that exceed client expectations. Whether for international or local exhibitions, Stall Craft ensures your brand stands out with impressive and engaging designs.
+              StallCraft Designs is a leading, dynamic provider of customized exhibition solutions, offering a diverse range of services tailored for the global exhibition industry. With an expert team of creative designers and skilled professionals, we transform ideas into reality with precision and innovation. Our strength lies in creating unique, standout exhibition stands that help brands make an impact at trade shows and events worldwide. From concept to execution, we offer high-quality, cost-effective services that exceed client expectations. Whether for international or local exhibitions, StallCraft Designs ensures your brand stands out with impressive and engaging designs.
             </Typography>
           </Container>
         </motion.div>
@@ -119,7 +119,7 @@ export default function About() {
                   Our Vision
                 </Typography>
                 <Typography variant="h6" sx={{ color: "grey.700", fontFamily: "Syne, sans-serif", mb: 5 }}>
-                  At Stall Craft, our vision is to lead the exhibition design industry with innovative and impactful solutions. We aim to create exceptional spaces that reflect our clients’ brand identity while fostering meaningful connections. By embracing cutting-edge design trends and technology, we strive to deliver memorable experiences at exhibitions and trade shows worldwide.
+                  At StallCraft Designs, our vision is to lead the exhibition design industry with innovative and impactful solutions. We aim to create exceptional spaces that reflect our clients’ brand identity while fostering meaningful connections. By embracing cutting-edge design trends and technology, we strive to deliver memorable experiences at exhibitions and trade shows worldwide.
                 </Typography>
               </motion.div>
             </Grid>
