@@ -21,9 +21,9 @@ const services = [
   },
   {
     id: 2,
-    title: "Country Pavilion",
-    desc: "Showcase your country’s culture, industry, and innovations with a professionally designed pavilion.",
-    image: "https://dummyimage.com/500x350/f4a261/fff&text=Country+Pavilion",
+    title: "Mezzanine Stands",
+    desc: "Maximize your exhibition space with multi-level mezzanine stands that offer a unique and premium look.",
+    image: "https://dummyimage.com/500x350/e63946/fff&text=Mezzanine+Stands",
   },
   {
     id: 3,
@@ -33,9 +33,9 @@ const services = [
   },
   {
     id: 4,
-    title: "Mezzanine Stands",
-    desc: "Maximize your exhibition space with multi-level mezzanine stands that offer a unique and premium look.",
-    image: "https://dummyimage.com/500x350/e63946/fff&text=Mezzanine+Stands",
+    title: "Country Pavilion",
+    desc: "Showcase your country’s culture, industry, and innovations with a professionally designed pavilion.",
+    image: "https://dummyimage.com/500x350/f4a261/fff&text=Country+Pavilion",
   },
 ];
 

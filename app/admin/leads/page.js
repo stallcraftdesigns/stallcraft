@@ -83,7 +83,7 @@ export default function LeadPage() {
 
       const result = await response.json(); // Parse response body
 
-      if (result.statusCode == 201) { // Check success
+      if (result.statusCode == 201 || 200) { // Check success
         setLeads((prevLeads) =>
           prevLeads.map((lead) =>
             lead.id === selectedLead.id ? { ...lead, status: newStatus } : lead

@@ -23,7 +23,7 @@ const Portfolio = () => {
         height: "100%",
         position: "relative",
         bgcolor: "#FAF9F6",
-        py: 5,
+        // py: 5,
       }}
     >
       <Typography
@@ -32,7 +32,8 @@ const Portfolio = () => {
         align="center"
         gutterBottom
         fontFamily="var(--font-syne)"
-        mb={8}
+        mb={5}
+        mt={5}
       >
         Our Portfolio
       </Typography>

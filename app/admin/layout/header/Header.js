@@ -22,6 +22,7 @@ import { usePathname } from "next/navigation";
 import { styled } from "@mui/material/styles";
 import { useMediaQuery } from "@mui/material";
 import Link from "next/link";
+import HomeIcon from '@mui/icons-material/Home';
 
 const drawerWidth = 240;
 
@@ -51,6 +52,7 @@ export default function AdminLayout() {
 
   const menuItems = [
     { text: "Dashboard", icon: <DashboardIcon />, path: "/admin/dashboard" },
+    { text: "Home", icon: <HomeIcon />, path: "/admin/home" },
     { text: "Services", icon: <BuildIcon />, path: "/admin/services" },
     { text: "Portfolio", icon: <ImageIcon />, path: "/admin/portfolio" },
     { text: "Testimonials", icon: <CommentIcon />, path: "/admin/testimonials" },

@@ -77,7 +77,7 @@ export default function Header() {
           {/* Desktop Navigation */}
           <Box
             sx={{
-              display: { xs: "none", md: "flex" },
+              display: { xs: "none", lg: "flex" },
               gap: 4,
               alignItems: "center",
               mt: 3,
@@ -92,7 +92,7 @@ export default function Header() {
             color="inherit"
             aria-label="menu"
             onClick={handleDrawerToggle}
-            sx={{ display: { md: "none" }, position: "absolute", right: 16 }}
+            sx={{ display: { lg: "none" }, position: "absolute", right: 16 }}
           >
             <MenuIcon />
           </IconButton>
@@ -114,7 +114,7 @@ const Logo = () => (
   <Box
     sx={{
       position: "absolute",
-      left: { xs: 12, md: 24 }, // Adjust left position for responsiveness
+      left: { xs: 12, md: 0 }, // Adjust left position for responsiveness
       width: { xs: 170, md: 180 },
       height: { xs: 150, md: 160 },
       px: 2,

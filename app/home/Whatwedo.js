@@ -21,7 +21,7 @@ const WhatWeDo = () => {
           alignItems: "center",
           display: "flex",
           justifyContent: "center",
-          mx:"auto"
+          mx: "auto"
         }}
       >
         <Grid
@@ -66,11 +66,7 @@ const WhatWeDo = () => {
               tailored to your business needs.
             </Typography>
             <Typography variant="body1" sx={{ color: "grey.700", mb: 4 }}>
-              Our expertise spans across web development, UI/UX design, mobile
-              applications, and digital marketing. We build powerful and
-              scalable solutions that help businesses grow in the digital world.
-              Whether you need a sleek website, an intuitive mobile app, or a
-              complete brand transformation, we deliver exceptional results.
+            Stallcraft Designs is a leading exhibition stall design company, providing high-quality, durable, and attractive stand solutions worldwide. We specialize in design, fabrication, and installation, ensuring your exhibition stand effectively attracts new business. With expertise in Exhibition Project Management, Booth Branding, and Stand Advertising, we deliver end-to-end solutions, helping clients achieve their business goals. As a trusted exhibition stand builder in India, we are committed to efficient trade show booth design and exhibition management.
             </Typography>
             <Button
               variant="contained"
