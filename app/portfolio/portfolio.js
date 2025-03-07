@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Box,
   Container,
@@ -32,8 +32,29 @@ const portfolioImages = Array.from(
 );
 
 export default function PortfolioPage() {
+  const [portfolios, setPortfolios] = useState([]);
+  const [loading, setLoading] = useState(false);
+
   const [selectedImage, setSelectedImage] = useState(null);
   const [openSnackbar, setOpenSnackbar] = useState(false);
+
+  // Fetch brands from API
+  const fetchPortfolios = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch("/api/routes/portfolio?status=active");
+      const data = await response.json();
+      setPortfolios(data.data || []);
+    } catch (error) {
+      console.error("Error fetching brands:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchPortfolios();
+  }, []);
 
   const handleShare = () => {
     if (selectedImage) {
@@ -102,7 +123,15 @@ export default function PortfolioPage() {
           >
             Our Portfolio
           </Typography>
-          <Breadcrumbs sx={{ color: "white", justifyContent: "center", display: "flex", mt: 1, fontFamily: "var(--font-syne)" }}>
+          <Breadcrumbs
+            sx={{
+              color: "white",
+              justifyContent: "center",
+              display: "flex",
+              mt: 1,
+              fontFamily: "var(--font-syne)",
+            }}
+          >
             <Link
               href="/"
               underline="hover"
@@ -129,17 +158,17 @@ export default function PortfolioPage() {
 
         {/* Image Grid */}
         <Grid container spacing={2}>
-          {portfolioImages.map((img, index) => (
-            <Grid item xs={6} sm={4} md={3} key={index}>
+          {portfolios.map((portfolio) => (
+            <Grid item xs={6} sm={4} md={3} key={portfolio.id}>
               <motion.div
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
+                transition={{ duration: 0.6, delay: 0.1 }}
               >
                 <Box
                   component="img"
-                  src={img}
-                  alt={`Project ${index + 1}`}
+                  src={portfolio.image}
+                  alt={`Project`}
                   sx={{
                     width: "100%",
                     height: "auto",
@@ -164,74 +193,105 @@ export default function PortfolioPage() {
             <Modal
               open={Boolean(selectedImage)}
               onClose={() => setSelectedImage(null)}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                width: "100%",
+                maxWidth: "800px", // Adjust max width as needed
+                margin: "auto", // Center the modal horizontally
+              }}
             >
-              <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.7 }}
-                transition={{ duration: 0.3 }}
+              <Box
+                sx={{
+                  bgcolor: "background.paper",
+                  boxShadow: 24,
+                  p: 2,
+                  borderRadius: "10px",
+                  maxWidth: "90vw",
+                  maxHeight: "90vh",
+                  width: "100%",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  position: "relative",
+                  overflow: "auto", // Add scroll if content overflows
+                }}
               >
-                <Box
+                {/* Close Button */}
+                <IconButton
+                  onClick={() => setSelectedImage(null)}
                   sx={{
                     position: "absolute",
-                    top: "50%",
-                    left: "50%",
-                    transform: "translate(-50%, -50%)",
-                    bgcolor: "background.paper",
-                    boxShadow: 24,
-                    p: 2,
-                    borderRadius: "10px",
-                    maxWidth: "90vw",
-                    maxHeight: "90vh",
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
+                    top: 10,
+                    right: 10,
+                    zIndex: 1, // Ensure it's above other content
+                    borderRadius: "50%", // Make it circular
+                    "&:hover": {
+                      backgroundColor: "action.hover", // Add hover effect
+                    },
                   }}
                 >
-                  {/* Close Button */}
-                  <IconButton
-                    onClick={() => setSelectedImage(null)}
-                    sx={{ position: "absolute", top: 10, right: 10 }}
-                  >
-                    <CloseIcon />
-                  </IconButton>
+                  <CloseIcon />
+                </IconButton>
 
-                  {/* Image */}
+                {/* Image */}
+                <Box
+                  sx={{
+                    width: "100%",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    mt: 4, // Add margin to account for the close button
+                  }}
+                >
                   <Image
                     src={selectedImage}
                     alt="Large Preview"
                     width={600}
                     height={400}
+                    style={{
+                      maxWidth: "100%",
+                      maxHeight: "70vh",
+                      objectFit: "contain",
+                    }}
                   />
-
-                  {/* Buttons Container */}
-                  <Box sx={{ display: "flex", gap: 2, mt: 1 }}>
-                    {/* Download Button */}
-                    <Tooltip title="Download">
-                      <motion.div
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.9 }}
-                      >
-                        <IconButton onClick={handleDownload}>
-                          <DownloadIcon />
-                        </IconButton>
-                      </motion.div>
-                    </Tooltip>
-
-                    {/* Share Button */}
-                    <Tooltip title="Copy Link">
-                      <motion.div
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.9 }}
-                      >
-                        <IconButton onClick={handleShare}>
-                          <ShareIcon />
-                        </IconButton>
-                      </motion.div>
-                    </Tooltip>
-                  </Box>
                 </Box>
-              </motion.div>
+
+                {/* Buttons Container */}
+                <Box
+                  sx={{
+                    display: "flex",
+                    gap: 2,
+                    mt: 2,
+                    mb: 2, // Add margin at the bottom
+                  }}
+                >
+                  {/* Download Button */}
+                  <Tooltip title="Download">
+                    <motion.div
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                    >
+                      <IconButton onClick={handleDownload}>
+                        <DownloadIcon />
+                      </IconButton>
+                    </motion.div>
+                  </Tooltip>
+
+                  {/* Share Button */}
+                  <Tooltip title="Copy Link">
+                    <motion.div
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                    >
+                      <IconButton onClick={handleShare}>
+                        <ShareIcon />
+                      </IconButton>
+                    </motion.div>
+                  </Tooltip>
+                </Box>
+              </Box>
             </Modal>
           )}
         </AnimatePresence>

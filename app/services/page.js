@@ -1,44 +1,12 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { Container, Grid, Card, CardContent, Typography, Button, Box, Breadcrumbs, Link } from "@mui/material";
 import Image from "next/image";
 import Layout from "../../layout/layout";
 import serviceBg from "@/public/assets/images/services.jpg";
-import { useRouter } from "next/navigation";
 import Brands from "../home/Brands";
-import { motion, AnimatePresence } from "framer-motion";
-
-// Services Data
-const services = [
-  {
-    id: 1,
-    title: "Custom Stands",
-    desc: "Tailor-made exhibition stands designed to reflect your brand identity and maximize visitor engagement.",
-    image: "https://dummyimage.com/600x400/007bff/fff&text=Custom+Stands",
-    slug: "custom-stands",
-  },
-  {
-    id: 2,
-    title: "Country Pavilion",
-    desc: "Showcase your country’s culture, industry, and innovations with a professionally designed pavilion.",
-    image: "https://dummyimage.com/600x400/f4a261/fff&text=Country+Pavilion",
-    slug: "country-pavilion",
-  },
-  {
-    id: 3,
-    title: "Interior & Exterior Design",
-    desc: "Create stunning interiors and eye-catching exteriors to enhance your exhibition space and attract visitors.",
-    image: "https://dummyimage.com/600x400/2a9d8f/fff&text=Interior+Exterior",
-    slug: "interior-exterior-design",
-  },
-  {
-    id: 4,
-    title: "Mezzanine Stands",
-    desc: "Maximize your exhibition space with multi-level mezzanine stands that offer a unique and premium look.",
-    image: "https://dummyimage.com/600x400/e63946/fff&text=Mezzanine+Stands",
-    slug: "mezzanine-stands",
-  },
-];
+import { motion } from "framer-motion";
 
 // Animation Variants
 const fadeInUp = {
@@ -59,7 +27,26 @@ const cardHover = {
 };
 
 export default function ServicesPage() {
-  const router = useRouter();
+  const [services, setServices] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  // Fetch brands from API
+  const fetchServices = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch("/api/routes/services?status=active");
+      const data = await response.json();
+      setServices(data.data || []);
+    } catch (error) {
+      console.error("Error fetching brands:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchServices();
+  }, []);
 
   return (
     <Layout title="Services">
@@ -91,27 +78,27 @@ export default function ServicesPage() {
             backgroundColor: "rgba(0, 0, 0, 0.5)",
           }}
         />
-          <Box sx={{ position: "relative", zIndex: 2, textAlign: "center" }}>
-            <Typography variant="h3" fontWeight="bold" sx={{ fontFamily: "var(--font-syne)" }}>
-              Our Services
+        <Box sx={{ position: "relative", zIndex: 2, textAlign: "center" }}>
+          <Typography variant="h3" fontWeight="bold" sx={{ fontFamily: "var(--font-syne)" }}>
+            Our Services
+          </Typography>
+          <Breadcrumbs
+            sx={{
+              color: "white",
+              justifyContent: "center",
+              display: "flex",
+              mt: 1,
+              fontFamily: "var(--font-syne)",
+            }}
+          >
+            <Link href="/" underline="hover" color="inherit" sx={{ fontFamily: "var(--font-syne)" }}>
+              Home
+            </Link>
+            <Typography color="white" sx={{ fontFamily: "var(--font-syne)" }}>
+              Services
             </Typography>
-            <Breadcrumbs
-              sx={{
-                color: "white",
-                justifyContent: "center",
-                display: "flex",
-                mt: 1,
-                fontFamily: "var(--font-syne)",
-              }}
-            >
-              <Link href="/" underline="hover" color="inherit" sx={{ fontFamily: "var(--font-syne)" }}>
-                Home
-              </Link>
-              <Typography color="white" sx={{ fontFamily: "var(--font-syne)" }}>
-                Services
-              </Typography>
-            </Breadcrumbs>
-          </Box>
+          </Breadcrumbs>
+        </Box>
       </Box>
 
       {/* What We Provide Section */}
@@ -137,53 +124,56 @@ export default function ServicesPage() {
       <Container maxWidth="lg" sx={{ pb: 10 }}>
         <motion.div variants={stagger} initial="hidden" whileInView="visible">
           <Grid container spacing={4} justifyContent="center">
-            {services.map((service, index) => (
-              <Grid item xs={12} sm={6} md={4} key={index}>
+            {services.map((service) => (
+              <Grid item xs={12} sm={6} md={4} key={service.id}>
                 <motion.div variants={fadeInUp} whileHover="hover">
                   <Card
                     sx={{
                       boxShadow: 4,
                       borderRadius: "12px",
+                      transition: "0.3s",
+                      "&:hover": { transform: "scale(1.05)" },
                       overflow: "hidden",
                       textAlign: "center",
-                      cursor: "pointer",
-                      transition: "transform 0.3s",
+                      display: "flex",
+                      flexDirection: "column",
+                      height: "100%", // Ensure card takes full height
+                      minHeight: 400,
+                      variants:{cardHover}
                     }}
-                    component={motion.div}
-                    variants={cardHover}
                   >
-                    <motion.div whileHover={{ scale: 1.05 }}>
-                      <Box sx={{ position: "relative", width: "100%", height: "200px", overflow: "hidden" }}>
-                        <Image
-                          src={service.image}
-                          alt={service.title}
-                          layout="fill"
-                          objectFit="cover"
-                          style={{ transition: "transform 0.3s" }}
-                        />
-                      </Box>
-                    </motion.div>
-                    <CardContent>
-                      <Typography variant="h5" fontWeight="bold" sx={{ fontFamily: "var(--font-syne)", mb: 1 }}>
+                    {/* Service Image */}
+                    <Box sx={{ position: "relative", width: "100%", height: "200px" }}>
+                      <Image src={service.image} alt={service.title} layout="fill" />
+                    </Box>
+
+                    {/* Card Content (Flexbox Applied) */}
+                    <CardContent sx={{ display: "flex", flexDirection: "column", flexGrow: 1 }}>
+                      <Typography
+                        variant="h5"
+                        fontWeight="bold"
+                        sx={{ fontFamily: "var(--font-syne)", mb: 1 }}
+                      >
                         {service.title}
                       </Typography>
-                      <Typography color="textSecondary" sx={{ fontFamily: "var(--font-syne)", mb: 2 }}>
+                      <Typography
+                        color="textSecondary"
+                        sx={{ fontFamily: "var(--font-syne)", mb: 2, flexGrow: 1 }}
+                      >
                         {service.desc}
                       </Typography>
-                      <Link href={`/services/${service.id}`}>
-                        <Button
-                          variant="contained"
-                          color="primary"
-                          sx={{ mt: 2 }}
-                          component={motion.div}
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
-                        >
-                          Know More
-                        </Button>
-                      </Link>
+
+                      {/* Wrapper to ensure button stays at the bottom */}
+                      <Box sx={{ mt: "auto", pt: 2 }}>
+                        <Link href={`/services/${service.id}`}>
+                          <Button variant="contained" color="primary">
+                            Know More
+                          </Button>
+                        </Link>
+                      </Box>
                     </CardContent>
                   </Card>
+
                 </motion.div>
               </Grid>
             ))}

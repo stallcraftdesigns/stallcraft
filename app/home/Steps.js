@@ -11,7 +11,7 @@ const Steps = () => {
   return (
     <Box
       sx={{
-        py: 12,
+        py: 8,
         width: "100%",
         display: "flex",
         flexDirection: "column",
@@ -24,7 +24,7 @@ const Steps = () => {
         variant="h4"
         fontWeight="bold"
         fontFamily="var(--font-syne)"
-        mb={6}
+        mb={4}
         sx={{ fontSize: { xs: "1.8rem", md: "2.5rem" } }} // Responsive font
       >
         Our Process

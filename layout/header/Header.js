@@ -68,7 +68,6 @@ export default function Header() {
             justifyContent: "flex-end", // Align nav items to the right
             alignItems: "center",
             position: "relative",
-            minHeight: "90px",
           }}
         >
           {/* Logo Component */}

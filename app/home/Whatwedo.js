@@ -12,7 +12,7 @@ const WhatWeDo = () => {
         height: "100%",
         position: "relative",
         bgcolor: "#FAF9F6",
-        py: 5,
+        py: 10,
       }}
     >
       <Box
@@ -65,29 +65,33 @@ const WhatWeDo = () => {
               We specialize in crafting high-quality digital experiences
               tailored to your business needs.
             </Typography>
-            <Typography variant="body1" sx={{ color: "grey.700", mb: 4 }}>
-            Stallcraft Designs is a leading exhibition stall design company, providing high-quality, durable, and attractive stand solutions worldwide. We specialize in design, fabrication, and installation, ensuring your exhibition stand effectively attracts new business. With expertise in Exhibition Project Management, Booth Branding, and Stand Advertising, we deliver end-to-end solutions, helping clients achieve their business goals. As a trusted exhibition stand builder in India, we are committed to efficient trade show booth design and exhibition management.
-            </Typography>
-            <Button
-              variant="contained"
-              color="primary"
-              size="large"
-              sx={{
-                textTransform: "uppercase",
-                fontWeight: "bold",
-                borderRadius: "30px",
-                px: 4,
-                py: 1.5,
-                fontSize: "1rem",
-                transition: "0.3s",
-                "&:hover": {
-                  backgroundColor: "#0056b3",
-                  transform: "scale(1.05)",
-                },
-              }}
-            >
-              Learn More
-            </Button>
+            <Typography variant="body1" fontSize={16} sx={{ color: "grey.700", mb: 4 }}>
+              Stallcraft Designs is a leading exhibition stall design company, providing high-quality, durable, and attractive stand solutions worldwide. We specialize in design, fabrication, and installation, ensuring your exhibition stand effectively attracts new business. With expertise in Exhibition Project Management, Booth Branding, and Stand Advertising, we deliver end-to-end solutions, helping clients achieve their business goals. As a trusted exhibition stand builder in India, we are committed to efficient trade show booth design and exhibition management.
+              <br />
+              Our innovative approach ensures unique and eye-catching designs tailored to your brand identity. With a global presence and a dedicated team, we transform ideas into impactful exhibition experiences. We prioritize quality, creativity, and functionality to make your brand stand out in any exhibition. Our customer-centric approach guarantees seamless execution, from concept to completion, ensuring a stress-free experience for our clients.
+              </Typography>
+              <Button
+
+                variant="contained"
+                color="primary"
+                size="large"
+                href="/about"
+                sx={{
+                  textTransform: "uppercase",
+                  fontWeight: "bold",
+                  borderRadius: "30px",
+                  px: 4,
+                  py: 1.5,
+                  fontSize: "1rem",
+                  transition: "0.3s",
+                  "&:hover": {
+                    backgroundColor: "#0056b3",
+                    transform: "scale(1.05)",
+                  },
+                }}
+              >
+                Learn More
+              </Button>
           </Grid>
 
           {/* Image Section */}
@@ -103,7 +107,7 @@ const WhatWeDo = () => {
           >
             <Box
               component="img"
-              src={whatWeDoImage}
+              src="./assets/images/whatwedo.jpg"
               alt="What We Do"
               sx={{
                 width: "100%",

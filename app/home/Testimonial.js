@@ -5,8 +5,9 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
+import { useState, useEffect } from "react";
 
-const testimonials = [
+const testimonial = [
   {
     name: "John Doe",
     message: "This service is fantastic! Highly recommended.",
@@ -30,6 +31,27 @@ const testimonials = [
 ];
 
 const Testimonials = () => {
+  const [testimonials, setTestimonials] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  // Fetch brands from API
+  const fetchTestimonials = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch("/api/routes/brands?status=active");
+      const data = await response.json();
+      setTestimonials(data.data || []);
+    } catch (error) {
+      console.error("Error fetching brands:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchTestimonials();
+  }, []);
+
   return (
     <Box>
       <Container sx={{ py: 5, mt: 5, width: "100%", textAlign: "center" }}>
@@ -55,7 +77,7 @@ const Testimonials = () => {
             1024: { slidesPerView: 3 },
           }}
         >
-          {testimonials.map((testimonial, index) => (
+          {testimonial.map((testimonial, index) => (
             <SwiperSlide key={index}>
               <Card
                 sx={{

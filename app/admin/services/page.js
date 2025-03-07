@@ -179,7 +179,6 @@ export default function ServicesPage() {
       const data = await response.json();
 
       if (data.statusCode === 201) {
-        fetchServices();
         setSnackbar({ open: true, message: "Service deleted!", severity: "success" });
       } else {
         setSnackbar({ open: true, message: data.errorMessage, severity: "error" });

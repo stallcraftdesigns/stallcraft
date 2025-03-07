@@ -11,35 +11,31 @@ import {
 } from "@mui/material";
 import Image from "next/image";
 import Link from "next/link";
-
-const services = [
-  {
-    id: 1,
-    title: "Custom Stands",
-    desc: "Tailor-made exhibition stands designed to reflect your brand identity and maximize visitor engagement.",
-    image: "https://dummyimage.com/500x350/007bff/fff&text=Custom+Stands",
-  },
-  {
-    id: 2,
-    title: "Mezzanine Stands",
-    desc: "Maximize your exhibition space with multi-level mezzanine stands that offer a unique and premium look.",
-    image: "https://dummyimage.com/500x350/e63946/fff&text=Mezzanine+Stands",
-  },
-  {
-    id: 3,
-    title: "Interior & Exterior Design",
-    desc: "Create stunning interiors and eye-catching exteriors to enhance your exhibition space and attract visitors.",
-    image: "https://dummyimage.com/500x350/2a9d8f/fff&text=Interior+Exterior",
-  },
-  {
-    id: 4,
-    title: "Country Pavilion",
-    desc: "Showcase your country’s culture, industry, and innovations with a professionally designed pavilion.",
-    image: "https://dummyimage.com/500x350/f4a261/fff&text=Country+Pavilion",
-  },
-];
+import { useState, useEffect } from "react";
 
 const Services = () => {
+  const [services, setServices] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  // Fetch brands from API
+  const fetchServices = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch("/api/routes/services?status=active");
+      const data = await response.json();
+      setServices(data.data || []);
+    } catch (error) {
+      console.error("Error fetching brands:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchServices();
+  }, []);
+
+
   return (
     <Container
       sx={{ py: 10, width: { xs: "90%", md: "100%" }, textAlign: "center" }}
@@ -58,47 +54,45 @@ const Services = () => {
       <Grid container spacing={4} justifyContent="center">
         {services.slice(0, 3).map((service) => (
           <Grid item xs={12} sm={6} md={4} key={service.id}>
-            <Card
-              sx={{
-                boxShadow: 4,
-                borderRadius: "12px",
-                transition: "0.3s",
-                "&:hover": { transform: "scale(1.05)" },
-                overflow: "hidden",
-                textAlign: "center",
-              }}
-            >
-              {/* Service Image */}
-              <Box
-                sx={{ position: "relative", width: "100%", height: "200px" }}
-              >
-                <Image src={service.image} alt={service.title} layout="fill" />
-              </Box>
+<Card
+  sx={{
+    boxShadow: 4,
+    borderRadius: "12px",
+    transition: "0.3s",
+    "&:hover": { transform: "scale(1.05)" },
+    overflow: "hidden",
+    textAlign: "center",
+    display: "flex",
+    flexDirection: "column",
+    height: "100%", // Ensure card takes full height
+  }}
+>
+  {/* Service Image */}
+  <Box sx={{ position: "relative", width: "100%", height: "200px" }}>
+    <Image src={service.image} alt={service.title} layout="fill" />
+  </Box>
 
-              {/* Card Content */}
-              <CardContent>
-                <Typography
-                  variant="h5"
-                  fontWeight="bold"
-                  sx={{ fontFamily: "var(--font-syne)", mb: 1 }}
-                >
-                  {service.title}
-                </Typography>
-                <Typography
-                  color="textSecondary"
-                  sx={{ fontFamily: "var(--font-syne)", mb: 2 }}
-                >
-                  {service.desc}
-                </Typography>
+  {/* Card Content (Flexbox Applied) */}
+  <CardContent sx={{ display: "flex", flexDirection: "column", flexGrow: 1 }}>
+    <Typography
+      variant="h5"
+      fontWeight="bold"
+      sx={{ fontFamily: "var(--font-syne)", mb: 1 }}
+    >
+      {service.title}
+    </Typography>
 
-                {/* Know More Button (Navigates to service single page) */}
-                <Link href={`/services/${service.id}`} passHref>
-                  <Button variant="contained" color="primary" sx={{ mt: 2 }}>
-                    Know More
-                  </Button>
-                </Link>
-              </CardContent>
-            </Card>
+    {/* Wrapper to ensure button stays at the bottom */}
+    <Box sx={{ mt: "auto", pt: 2 }}>
+      <Link href={`/services/${service.id}`} passHref>
+        <Button variant="contained" color="primary">
+          Know More
+        </Button>
+      </Link>
+    </Box>
+  </CardContent>
+</Card>
+
           </Grid>
         ))}
       </Grid>

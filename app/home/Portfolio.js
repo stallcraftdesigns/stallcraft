@@ -6,15 +6,30 @@ import { Autoplay, Pagination } from "swiper/modules";
 import Link from "next/link";
 import "swiper/css";
 import "swiper/css/pagination";
-
-const portfolioImages = [
-  "https://dummyimage.com/500x300/6495ED/fff&text=Portfolio+1", // Cornflower Blue
-  "https://dummyimage.com/500x300/FFB6C1/fff&text=Portfolio+2", // Light Pink
-  "https://dummyimage.com/500x300/90EE90/fff&text=Portfolio+3", // Light Green
-];
-
+import { useState, useEffect } from "react";
 
 const Portfolio = () => {
+  const [portfolios, setPortfolios] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  // Fetch portfolios from API
+  const fetchPortfolios = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch("/api/routes/portfolio?status=active");
+      const data = await response.json();
+      setPortfolios((data.data || []).slice(0, 5)); // Only take the first 5 items
+    } catch (error) {
+      console.error("Error fetching portfolios:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchPortfolios();
+  }, []);
+
   return (
     <Box
       sx={{
@@ -23,7 +38,6 @@ const Portfolio = () => {
         height: "100%",
         position: "relative",
         bgcolor: "#FAF9F6",
-        // py: 5,
       }}
     >
       <Typography
@@ -45,19 +59,19 @@ const Portfolio = () => {
         spaceBetween={30}
         className="custom-portfolio"
         breakpoints={{
-          320: { slidesPerView: 1 },  
-          640: { slidesPerView: 2 },  
+          320: { slidesPerView: 1 },
+          640: { slidesPerView: 2 },
           1024: { slidesPerView: 3 },
         }}
         style={{ padding: "0 30px" }}
       >
-        {portfolioImages.map((img, index) => (
-          <SwiperSlide key={index}>
-            <Link href="/portfolio">
+        {portfolios.map((portfolio) => (
+          <SwiperSlide key={portfolio.id}>
+            <Link href={`/portfolio/${portfolio.id}`}>
               <Box
                 component="img"
-                src={img}
-                alt={`Portfolio ${index + 1}`}
+                src={portfolio.image} // Use image field from API
+                alt={portfolio.name} // Use name field for alt text
                 width="100%"
                 height="auto"
                 borderRadius="8px"

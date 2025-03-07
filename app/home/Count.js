@@ -48,8 +48,8 @@ const Count = () => {
     >
       <Grid container spacing={4} justifyContent="center" alignItems="center">
         {[
-          { label: "Happy Clients", end: 10000 },
-          { label: "Venues", end: 500 },
+          { label: "Happy Clients", end: 1000 },
+          { label: "Venues", end: 50 },
           { label: "Stalls Made", end: 1500 },
         ].map((item, index) => (
           <Grid
