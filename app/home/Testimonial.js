@@ -9,23 +9,23 @@ import { useState, useEffect } from "react";
 
 const testimonial = [
   {
-    name: "John Doe",
+    name: "Rahul Kumar",
     message: "This service is fantastic! Highly recommended.",
   },
   {
-    name: "Jane Smith",
+    name: "Anurag Tyagi",
     message: "Amazing experience! Will use again.",
   },
   {
-    name: "Alice Johnson",
+    name: "Sagar Kaushik",
     message: "Professional and efficient. Great service!",
   },
   {
-    name: "Alice Johnson",
+    name: "Vikas Chaudhary",
     message: "Professional and efficient. Great service!",
   },
   {
-    name: "Alice Johnson",
+    name: "Rekha Sirohi",
     message: "Professional and efficient. Great service!",
   },
 ];

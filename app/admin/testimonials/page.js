@@ -43,7 +43,6 @@ export default function TestimonialsPage() {
   const [selectedTestimonial, setSelectedTestimonial] = useState(null);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [phoneNo, setPhoneNo] = useState("");
   const [status, setStatus] = useState("active");
   const [message, setMessage] = useState("");
   const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
@@ -83,7 +82,6 @@ export default function TestimonialsPage() {
     setSelectedTestimonial(testimonial);
     setName(testimonial ? testimonial.name : "");
     setEmail(testimonial ? testimonial.email : "");
-    setPhoneNo(testimonial ? testimonial.phoneNo : "");
     setStatus(testimonial ? testimonial.status : "active");
     setMessage(testimonial ? testimonial.message : "");
     setOpen(true);
@@ -94,7 +92,6 @@ export default function TestimonialsPage() {
     setOpen(false);
     setName("");
     setEmail("");
-    setPhoneNo("");
     setStatus("active");
     setMessage("");
   };
@@ -104,37 +101,50 @@ export default function TestimonialsPage() {
     const isEditing = editing && selectedTestimonial;
     try {
       setLoading((prev) => ({ ...prev, [isEditing ? "update" : "add"]: true }));
-
-      const formData = new FormData();
-      formData.append("name", name);
-      formData.append("email", email);
-      formData.append("phoneNo", phoneNo);
-      formData.append("status", status);
-      formData.append("message", message);
-
+  
+      const requestBody = {
+        name,
+        email,
+        status,
+        message,
+      };
+  
       const response = await fetch(
-        isEditing ? `/api/routes/testimonials/${selectedTestimonial.id}` : "/api/routes/testimonials",
+        isEditing 
+          ? `/api/routes/testimonials/${selectedTestimonial.id}` 
+          : "/api/routes/testimonials",
         {
           method: isEditing ? "PUT" : "POST",
-          body: formData,
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(requestBody),
         }
       );
-
+  
       const data = await response.json();
-
-      if (data.statusCode === 200 || data.statusCode === 201) {
-        fetchTestimonials();
+  
+      if (response.ok) { // Use response.ok instead of checking statusCode
+        fetchTestimonials(); // Only fetch new testimonials if the request was successful
         handleClose();
-        setSnackbar({ open: true, message: isEditing ? "Testimonial updated!" : "Testimonial added!", severity: "success" });
+        setSnackbar({ 
+          open: true, 
+          message: isEditing ? "Testimonial updated!" : "Testimonial added!", 
+          severity: "success" 
+        });
       } else {
-        setSnackbar({ open: true, message: data.errorMessage || "Operation failed", severity: "error" });
+        throw new Error(data.errorMessage || "Operation failed");
       }
     } catch (error) {
-      setSnackbar({ open: true, message: "Operation failed", severity: "error" });
+      setSnackbar({ 
+        open: true, 
+        message: error.message || "Operation failed", 
+        severity: "error" 
+      });
     } finally {
       setLoading((prev) => ({ ...prev, [isEditing ? "update" : "add"]: false }));
     }
-  };
+  };  
 
   // Delete Testimonial
   const handleDelete = async (id) => {
@@ -220,7 +230,6 @@ export default function TestimonialsPage() {
               <TableRow sx={{ backgroundColor: "#333" }}>
                 <TableCell sx={{ color: "white", fontWeight: "bold" }}>Name</TableCell>
                 <TableCell sx={{ color: "white", fontWeight: "bold" }}>Email</TableCell>
-                <TableCell sx={{ color: "white", fontWeight: "bold" }}>Phone</TableCell>
                 <TableCell sx={{ color: "white", fontWeight: "bold" }}>Status</TableCell>
                 <TableCell sx={{ color: "white", fontWeight: "bold" }}>Message</TableCell>
                 <TableCell sx={{ color: "white", fontWeight: "bold" }}>Actions</TableCell>
@@ -236,7 +245,6 @@ export default function TestimonialsPage() {
                 >
                   <TableCell sx={{ fontSize: "1.1rem", fontWeight: "500" }}>{testimonial.name}</TableCell>
                   <TableCell sx={{ fontSize: "1.1rem", fontWeight: "500" }}>{testimonial.email}</TableCell>
-                  <TableCell sx={{ fontSize: "1.1rem", fontWeight: "500" }}>{testimonial.phoneNo}</TableCell>
                   <TableCell sx={{ fontSize: "1.1rem", fontWeight: "500" }}>{testimonial.status}</TableCell>
                   <TableCell sx={{ fontSize: "1.1rem", fontWeight: "500" }}>{testimonial.message}</TableCell>
                   <TableCell>
@@ -297,15 +305,6 @@ export default function TestimonialsPage() {
                 label="Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                margin="normal"
-              />
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <TextField
-                fullWidth
-                label="Phone"
-                value={phoneNo}
-                onChange={(e) => setPhoneNo(e.target.value)}
                 margin="normal"
               />
             </Grid>

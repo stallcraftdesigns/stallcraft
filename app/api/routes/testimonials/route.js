@@ -40,13 +40,9 @@ export async function GET(req) {
 // Add a new testimonial (POST)
 export async function POST(req) {
     try {
-        const formData = await req.formData();
-        const name = formData.get("name");
-        const email = formData.get("email");
-        const phoneNo = formData.get("phoneNo");
-        const status = formData.get("status");
-        const message = formData.get("message");
+        const { name, email, message, status } = await req.json();
 
+        
         if (!name || !message) {
             return NextResponse.json({
                 statusCode: 400,
@@ -59,7 +55,6 @@ export async function POST(req) {
         const newTestimonial = await TestimonialService.addTestimonial({
             name,
             email,
-            phoneNo,
             message,
             status,
         });

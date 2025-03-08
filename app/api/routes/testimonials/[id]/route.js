@@ -37,23 +37,32 @@ export async function GET(req, { params }) {
 // Update a testimonial by ID (PUT)
 export async function PUT(req, { params }) {
     try {
-        const { id } = await params;
-        const formData = await req.formData();
-        if (!id) throw new Error("Testimonial ID is required");
+        const { id } = await params; // No need for `await params`
+
+        if (!id) {
+            return NextResponse.json({
+                statusCode: 400,
+                errorCode: "BAD_REQUEST",
+                errorMessage: "Testimonial ID is required",
+            }, { status: 400 });
+        }
+
+        const { title, status, email, message } = await req.json(); // Correct way to parse body
 
         let updateData = {};
-        const title = formData.get("title");
-        const email = formData.get("email");
-        const phoneNo = formData.get("phoneNo");
-        const message = formData.get("message");
-        const status = formData.get("status");
 
-        if (title) updateData.title = title;    
+        if (title) updateData.title = title;
         if (status) updateData.status = status;
         if (email) updateData.email = email;
-        if (phoneNo) updateData.phoneNo = phoneNo;
         if (message) updateData.message = message;
-    
+
+        if (Object.keys(updateData).length === 0) {
+            return NextResponse.json({
+                statusCode: 400,
+                errorCode: "BAD_REQUEST",
+                errorMessage: "No update fields provided",
+            }, { status: 400 });
+        }
 
         const existingTestimonial = await TestimonialService.getTestimonialById(id);
         if (!existingTestimonial) {
@@ -65,7 +74,7 @@ export async function PUT(req, { params }) {
         }
 
         const updatedTestimonial = await TestimonialService.updateTestimonial(id, updateData);
-        consoleManager.log("Testimonial updated successfully:", id);
+        console.log("Testimonial updated successfully:", id);
 
         return NextResponse.json({
             statusCode: 200,
@@ -75,7 +84,7 @@ export async function PUT(req, { params }) {
             errorMessage: "",
         }, { status: 200 });
     } catch (error) {
-        consoleManager.error("Error in PUT /api/testimonials/[id]:", error);
+        console.error("Error in PUT /api/testimonials/[id]:", error);
         return NextResponse.json({
             statusCode: 500,
             errorCode: "INTERNAL_ERROR",
