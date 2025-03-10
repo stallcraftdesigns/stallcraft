@@ -4,6 +4,7 @@ import "./theme.js";
 import Preloader from "./Preloader";
 import CookieBanner from "./CookieConsent";
 import ScrollToTop from "./ScrollToTop";
+import TopBar from "./TopBar";
 
 export const metadata = {
   title: "StallCraft Designs",
@@ -22,16 +23,19 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
-      <link rel="icon" href="/favicon.ico" type="image/x-icon" sizes="541x461"/>
+        <link rel="icon" href="/favicon.ico" type="image/x-icon" sizes="541x461"/>
       </head>
       <body
         className={syneFont.variable}
         style={{ fontFamily: "var(--font-syne)" }}
       >
-        <Preloader />
-        <CookieBanner/>
-        <ScrollToTop/>
-        <Providers>{children}</Providers>
+        <Providers>
+          <Preloader />
+          <TopBar />
+          {children}
+          <CookieBanner/>
+          <ScrollToTop/>
+        </Providers>
       </body>
     </html>
   );

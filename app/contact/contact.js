@@ -159,7 +159,7 @@ export default function Contact() {
                     fontSize="20px"
                     fontWeight="bold"
                   >
-                    contact@stallcraft.in
+                    contact@stallcraftdesigns.in
                   </Typography>
                 </Box>
               </motion.div>
