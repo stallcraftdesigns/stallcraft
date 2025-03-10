@@ -21,8 +21,8 @@ const SocialPopup = () => {
       }}
     >
       {[
-        { icon: <InstagramIcon sx={{ fontSize: 25, }} />, color: "#E1306C", link: "https://instagram.com", label: "Instagram" },
-        { icon: <FacebookIcon sx={{ fontSize: 25, }} />, color: "#4267B2", link: "https://facebook.com", label: "Facebook" },
+        { icon: <InstagramIcon sx={{ fontSize: 25, }} />, color: "#E1306C", link: "https://www.instagram.com/stallcraftdesigns", label: "Instagram" },
+        { icon: <FacebookIcon sx={{ fontSize: 25, }} />, color: "#4267B2", link: "https://www.facebook.com/share/1AZexmgig9/?mibextid=wwXIfr", label: "Facebook" },
         { icon: <WhatsAppIcon sx={{ fontSize: 25, }} />, color: "#25D366", link: "https://wa.me/919910954993", label: "WhatsApp" },
       ].map((item, index) => (
         <Tooltip key={index} title={item.label}>
