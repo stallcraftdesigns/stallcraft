@@ -1,6 +1,7 @@
 import { Grid, Typography, Button, Box } from "@mui/material";
 import Image from "next/image";
 import whatwedo from "@/public/assets/images/whatwedo.jpg";
+import { memo } from "react";
 
 const WhatWeDo = () => {
   return (
@@ -20,7 +21,7 @@ const WhatWeDo = () => {
           alignItems: "center",
           display: "flex",
           justifyContent: "center",
-          mx: "auto"
+          mx: "auto",
         }}
       >
         <Grid
@@ -111,7 +112,7 @@ const WhatWeDo = () => {
                 borderRadius: "40% 60% 50% 50%",
                 boxShadow: "0 10px 30px rgba(0,0,0,0.2)",
                 transition: "0.3s",
-                overflow: "hidden", // Ensure border-radius applies properly
+                overflow: "hidden",
                 "&:hover": {
                   transform: "scale(1.05) rotate(2deg)",
                 },
@@ -123,6 +124,8 @@ const WhatWeDo = () => {
                 layout="responsive"
                 width={500}
                 height={500}
+                placeholder="blur" 
+                priority // Prioritize loading
               />
             </Box>
             {/* Decorative Shape */}
@@ -146,4 +149,4 @@ const WhatWeDo = () => {
   );
 };
 
-export default WhatWeDo;
+export default memo(WhatWeDo);
