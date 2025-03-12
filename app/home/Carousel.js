@@ -65,10 +65,10 @@ const Carousel = () => {
           <SwiperSlide key={index}>
             <Image
               src={image.image}
-              alt={`Slide ${index + 1}`}
+              alt="Image not found"
               width={1920}
               height={780}
-              style={{ width: "100%", height: "90vh", objectFit: "cover" }}
+              style={{ width: "100%", height: "auto", minHeight: "50vh", objectFit: "cover" }}
             />
           </SwiperSlide>
         ))}

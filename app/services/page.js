@@ -144,7 +144,7 @@ export default function ServicesPage() {
                   >
                     {/* Service Image */}
                     <Box sx={{ position: "relative", width: "100%", height: "200px" }}>
-                      <Image src={service.image} alt={service.title} layout="fill" />
+                      <Image src={service.image} alt="image" layout="fill" />
                     </Box>
 
                     {/* Card Content (Flexbox Applied) */}

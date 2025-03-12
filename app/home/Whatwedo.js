@@ -1,7 +1,6 @@
 import { Grid, Typography, Button, Box } from "@mui/material";
-
-const whatWeDoImage =
-  "https://dummyimage.com/500x500/007bff/fff&text=What+We+Do";
+import Image from "next/image";
+import whatwedo from "@/public/assets/images/whatwedo.jpg";
 
 const WhatWeDo = () => {
   return (
@@ -28,7 +27,7 @@ const WhatWeDo = () => {
           container
           spacing={6}
           alignItems="center"
-          direction={{ xs: "column-reverse", md: "row" }}
+          direction={{ xs: "column", md: "row" }}
         >
           {/* Text Section */}
           <Grid item xs={12} md={6}>
@@ -69,29 +68,29 @@ const WhatWeDo = () => {
               Stallcraft Designs is a leading exhibition stall design company, providing high-quality, durable, and attractive stand solutions worldwide. We specialize in design, fabrication, and installation, ensuring your exhibition stand effectively attracts new business. With expertise in Exhibition Project Management, Booth Branding, and Stand Advertising, we deliver end-to-end solutions, helping clients achieve their business goals. As a trusted exhibition stand builder in India, we are committed to efficient trade show booth design and exhibition management.
               <br />
               Our innovative approach ensures unique and eye-catching designs tailored to your brand identity. With a global presence and a dedicated team, we transform ideas into impactful exhibition experiences. We prioritize quality, creativity, and functionality to make your brand stand out in any exhibition. Our customer-centric approach guarantees seamless execution, from concept to completion, ensuring a stress-free experience for our clients.
-              </Typography>
-              <Button
-
-                variant="contained"
-                color="primary"
-                size="large"
-                href="/about"
-                sx={{
-                  textTransform: "uppercase",
-                  fontWeight: "bold",
-                  borderRadius: "30px",
-                  px: 4,
-                  py: 1.5,
-                  fontSize: "1rem",
-                  transition: "0.3s",
-                  "&:hover": {
-                    backgroundColor: "#0056b3",
-                    transform: "scale(1.05)",
-                  },
-                }}
-              >
-                Learn More
-              </Button>
+            </Typography>
+            <Button
+              variant="contained"
+              color="primary"
+              size="large"
+              href="/about"
+              sx={{
+                textTransform: "uppercase",
+                fontWeight: "bold",
+                borderRadius: "30px",
+                px: 4,
+                py: 1.5,
+                fontSize: "1rem",
+                transition: "0.3s",
+                mb: 5,
+                "&:hover": {
+                  backgroundColor: "#0056b3",
+                  transform: "scale(1.05)",
+                },
+              }}
+            >
+              Learn More
+            </Button>
           </Grid>
 
           {/* Image Section */}
@@ -106,20 +105,26 @@ const WhatWeDo = () => {
             }}
           >
             <Box
-              component="img"
-              src="./assets/images/whatwedo.jpg"
-              alt="What We Do"
               sx={{
                 width: "100%",
                 maxWidth: 500,
                 borderRadius: "40% 60% 50% 50%",
                 boxShadow: "0 10px 30px rgba(0,0,0,0.2)",
                 transition: "0.3s",
+                overflow: "hidden", // Ensure border-radius applies properly
                 "&:hover": {
                   transform: "scale(1.05) rotate(2deg)",
                 },
               }}
-            />
+            >
+              <Image
+                src={whatwedo}
+                alt="What We Do"
+                layout="responsive"
+                width={500}
+                height={500}
+              />
+            </Box>
             {/* Decorative Shape */}
             <Box
               sx={{
