@@ -50,7 +50,7 @@ const Carousel = () => {
         width: "100%",
         overflow: "hidden",
         height: "100%",
-        position: "relative",
+        position: "relative", 
       }}
     >
       <Swiper
