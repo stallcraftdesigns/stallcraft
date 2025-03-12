@@ -168,7 +168,7 @@ export default function PortfolioPage() {
                 <Box
                   component="img"
                   src={portfolio.image}
-                  alt={`Project`}
+                  alt="Project"
                   sx={{
                     width: "100%",
                     height: "auto",
@@ -180,7 +180,7 @@ export default function PortfolioPage() {
                       boxShadow: "0 4px 20px rgba(0, 0, 0, 0.3)",
                     },
                   }}
-                  onClick={() => setSelectedImage(img)}
+                  onClick={() => setSelectedImage(portfolio.image)}
                 />
               </motion.div>
             </Grid>

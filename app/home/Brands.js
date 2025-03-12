@@ -61,7 +61,7 @@ const Brands = () => {
             <Box sx={{ display: "flex", justifyContent: "center" }}>
               <Image
                 src={brand.image}
-                alt={brand.name}
+                alt={brand.title}
                 width={250}
                 height={100}
               />
