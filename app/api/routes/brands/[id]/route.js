@@ -65,7 +65,7 @@ export async function PUT(req, { params }) {
         if (!existingBrand.image) {
           console.warn("No old image URL found for replacement.");
         }
-        const imageUrl = await ReplaceImage(image, existingBrand.image, 250, 100);
+        const imageUrl = await ReplaceImage(image, existingBrand.image, 250, 150);
         updateData.image = imageUrl;
       } else {
         updateData.image = existingBrand.image; // Keep the existing image

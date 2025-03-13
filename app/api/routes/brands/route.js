@@ -56,7 +56,7 @@ export async function POST(req) {
         }
 
         // Upload image to Firebase Storage
-        const imageUrl = await UploadImage(file, 250, 100);
+        const imageUrl = await UploadImage(file, 250, 150);
 
         // Save brand in DB
         const newBrand = await BrandsService.addBrand({ title, image: imageUrl, status });

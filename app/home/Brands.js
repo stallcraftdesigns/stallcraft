@@ -63,7 +63,7 @@ const Brands = () => {
                 src={brand.image}
                 alt={brand.title}
                 width={250}
-                height={100}
+                height={120}
               />
             </Box>
           </SwiperSlide>
