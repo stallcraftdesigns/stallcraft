@@ -68,7 +68,7 @@ const Carousel = () => {
               alt="Image not found"
               width={1920}
               height={780}
-              style={{ width: "100%", height: "auto", minHeight: "50vh", objectFit: "cover" }}
+              style={{ width: "100%", height: "auto", minHeight: "30vh", objectFit: "cover" }}
             />
           </SwiperSlide>
         ))}
