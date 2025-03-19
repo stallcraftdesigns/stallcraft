@@ -7,10 +7,12 @@ import aboutBg from "@/public/assets/images/about.jpg";
 import visionImg from "@/public/assets/images/vision.png";
 import Brands from "../home/Brands";
 import { motion } from "framer-motion";
+import TopBar from "../TopBar";
 
 export default function About() {
   return (
     <Layout title="About Us">
+        <TopBar />
       {/* Hero Section */}
       <Box
         sx={{

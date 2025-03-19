@@ -4,10 +4,12 @@ import { Box, Container, Typography, Link, Breadcrumbs } from "@mui/material";
 import Layout from "../../layout/layout";
 import privacyBg from "@/public/assets/images/privacy.jpg";
 import { motion } from "framer-motion";
+import TopBar from "../TopBar";
 
 export default function PrivacyPolicy() {
   return (
     <Layout title="Privacy Policy">
+      <TopBar />
       {/* Hero Section */}
       <Box
         sx={{

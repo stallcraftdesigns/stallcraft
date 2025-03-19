@@ -4,7 +4,6 @@ import "./theme.js";
 import Preloader from "./Preloader";
 import CookieBanner from "./CookieConsent";
 import ScrollToTop from "./ScrollToTop";
-import TopBar from "./TopBar";
 
 export const metadata = {
   title: "StallCraft Designs",
@@ -31,7 +30,6 @@ export default function RootLayout({ children }) {
       >
         <Providers>
           <Preloader />
-          <TopBar />
           {children}
           <CookieBanner/>
           <ScrollToTop/>

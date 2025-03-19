@@ -18,6 +18,8 @@ import {
 import Layout from "../../layout/layout";
 import testimonialsBg from "@/public/assets/images/testimonials.jpg";
 import { motion } from "framer-motion";
+import TopBar from "../TopBar";
+
 const testimonial = [
   {
     id: 1,
@@ -143,6 +145,7 @@ export default function TestimonialsPage() {
 
   return (
     <Layout title="Testimonials">
+      <TopBar />
       {/* Banner Section */}
       <Box
         sx={{
