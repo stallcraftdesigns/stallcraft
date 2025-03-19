@@ -19,6 +19,7 @@ import contactBg from "@/public/assets/images/contact.jpg";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaFacebookF, FaInstagram, FaWhatsapp } from "react-icons/fa";
+import TopBar from "../TopBar";
 
 export default function Contact() {
   const [loading, setLoading] = useState(false);
@@ -70,6 +71,7 @@ export default function Contact() {
 
   return (
     <Layout title="Contact">
+      <TopBar />
       {/* Top Section with Background Image */}
       <Box
         sx={{

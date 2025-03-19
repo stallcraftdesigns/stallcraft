@@ -4,10 +4,13 @@ import { Box, Container, Typography, Link, Breadcrumbs } from "@mui/material";
 import Layout from "../../layout/layout";
 import termsBg from "@/public/assets/images/terms.jpg"; // Replace with an actual image
 import { motion } from "framer-motion";
+import TopBar from "../TopBar";
+
 
 export default function Terms() {
   return (
     <Layout title="Terms & Conditions">
+      <TopBar />
       {/* Hero Section */}
       <Box
         sx={{

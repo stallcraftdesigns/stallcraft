@@ -8,11 +8,14 @@ import Testimonials from "./Testimonial";
 import WhatWeDo from "./Whatwedo";
 import Services from "./services";
 import Steps from "./Steps";
+import TopBar from "../TopBar";
+
 
 export default function Home() {
   return (
     <Layout title="Home">
       <Box>
+      <TopBar />
         <Carousel />
 
         {/* What We Do - Updated Design with Image */}

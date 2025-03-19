@@ -6,6 +6,8 @@ import Image from "next/image";
 import { use, useEffect, useState } from "react";
 import serviceBg from "@/public/assets/images/services.jpg";
 import { motion } from "framer-motion";
+import TopBar from "../../TopBar";
+
 
 // Import Swiper components and styles
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -64,6 +66,7 @@ export default function ServiceDetailPage({ params }) {
 
   return (
     <Layout title={service.title}>
+      <TopBar />
       {/* Hero Section */}
       <Box
         sx={{

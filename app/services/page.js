@@ -7,6 +7,8 @@ import Layout from "../../layout/layout";
 import serviceBg from "@/public/assets/images/services.jpg";
 import Brands from "../home/Brands";
 import { motion } from "framer-motion";
+import TopBar from "../TopBar";
+
 
 // Animation Variants
 const fadeInUp = {
@@ -50,6 +52,7 @@ export default function ServicesPage() {
 
   return (
     <Layout title="Services">
+      <TopBar />
       {/* Hero Section with Animation */}
       <Box
         sx={{
