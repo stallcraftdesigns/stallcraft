@@ -38,7 +38,7 @@ const Testimonials = () => {
   const fetchTestimonials = async () => {
     try {
       setLoading(true);
-      const response = await fetch("/api/routes/brands?status=active");
+      const response = await fetch("/api/routes/testimonials?status=active");
       const data = await response.json();
       setTestimonials(data.data || []);
     } catch (error) {
