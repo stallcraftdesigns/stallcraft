@@ -199,7 +199,7 @@ export default function TestimonialsPage() {
       {/* Testimonials Grid */}
       <Container sx={{ py: 10, width: "90%", fontFamily: "var(--font-syne)" }}>
           <Grid container spacing={4} justifyContent="center">
-            {testimonial.map((testimonial, index) => (
+            {testimonials.map((testimonial, index) => (
               <Grid item xs={12} md={4} key={testimonial.id}>
                 <motion.div
                   initial={{ opacity: 0, y: 50 }}

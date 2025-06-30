@@ -77,7 +77,7 @@ const Testimonials = () => {
             1024: { slidesPerView: 3 },
           }}
         >
-          {testimonial.map((testimonial, index) => (
+          {testimonials.map((testimonial, index) => (
             <SwiperSlide key={index}>
               <Card
                 sx={{
