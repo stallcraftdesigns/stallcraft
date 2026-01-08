@@ -200,11 +200,12 @@ export default function TestimonialsPage() {
       <Container sx={{ py: 10, width: "90%", fontFamily: "var(--font-syne)" }}>
           <Grid container spacing={4} justifyContent="center">
             {testimonials.map((testimonial, index) => (
-              <Grid item xs={12} md={4} key={testimonial.id}>
+              <Grid item xs={12} md={4} key={testimonial.id} sx={{ display: "flex" }}>
                 <motion.div
                   initial={{ opacity: 0, y: 50 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
+                  style={{ width: "100%", display: "flex" }}
                 >
                   <Card
                     sx={{
@@ -214,45 +215,73 @@ export default function TestimonialsPage() {
                       background: "linear-gradient(135deg, #f0f4f8, #e0e6f0)",
                       boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
                       transition: "transform 0.3s, box-shadow 0.3s",
+                      height: "100%",
+                      minHeight: "320px",
+                      display: "flex",
+                      flexDirection: "column",
+                      width: "100%",
                       "&:hover": {
                         transform: "translateY(-10px)",
                         boxShadow: "0 10px 20px rgba(0, 0, 0, 0.2)",
                       },
                     }}
                   >
-                    <CardContent>
+                    <CardContent
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        flexGrow: 1,
+                        p: "0 !important",
+                        height: "100%",
+                      }}
+                    >
                       <Typography
                         variant="h4"
                         fontWeight="bold"
                         gutterBottom
                         fontFamily="var(--font-syne)"
-                        sx={{ color: "#007bff" }}
+                        sx={{ color: "#007bff", mb: 1 }}
                       >
-                        “
+                        "
                       </Typography>
                       <Typography
                         variant="body1"
                         color="grey.800"
                         fontFamily="var(--font-syne)"
-                        sx={{ mb: 3, fontSize: "1.1rem", fontStyle: "italic" }}
+                        sx={{
+                          mb: 3,
+                          fontSize: "1.1rem",
+                          fontStyle: "italic",
+                          flexGrow: 1,
+                          display: "-webkit-box",
+                          WebkitLineClamp: 6,
+                          WebkitBoxOrient: "vertical",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          minHeight: "150px",
+                          maxHeight: "180px",
+                          lineHeight: 1.6,
+                        }}
                       >
                         {testimonial.message}
                       </Typography>
-                      <Typography
-                        variant="h6"
-                        fontWeight="bold"
-                        gutterBottom
-                        fontFamily="var(--font-syne)"
-                      >
-                        {testimonial.name}
-                      </Typography>
-                      <Typography
-                        variant="body2"
-                        color="grey.600"
-                        fontFamily="var(--font-syne)"
-                      >
-                        {testimonial.position}
-                      </Typography>
+                      <Box sx={{ mt: "auto", pt: 2 }}>
+                        <Typography
+                          variant="h6"
+                          fontWeight="bold"
+                          gutterBottom
+                          fontFamily="var(--font-syne)"
+                        >
+                          {testimonial.name}
+                        </Typography>
+                        <Typography
+                          variant="body2"
+                          color="grey.600"
+                          fontFamily="var(--font-syne)"
+                        >
+                          {testimonial.position}
+                        </Typography>
+                      </Box>
                     </CardContent>
                   </Card>
                 </motion.div>

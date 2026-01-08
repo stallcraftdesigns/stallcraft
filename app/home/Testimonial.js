@@ -85,7 +85,9 @@ const Testimonials = () => {
                   flexDirection: "column",
                   borderRadius: 3,
                   boxShadow: 3,
-                  minHeight: 120,
+                  height: "100%",
+                  minHeight: 250,
+                  maxHeight: 350,
                   mb: 1,
                   alignItems: "center",
                   textAlign: "center",
@@ -101,14 +103,32 @@ const Testimonials = () => {
                     fontStyle: "italic",
                     lineHeight: 1.6,
                     mb: 2,
+                    flexGrow: 1,
+                    display: "-webkit-box",
+                    WebkitLineClamp: 5,
+                    WebkitBoxOrient: "vertical",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    overflowY: "auto",
+                    "&::-webkit-scrollbar": {
+                      width: "4px",
+                    },
+                    "&::-webkit-scrollbar-track": {
+                      background: "transparent",
+                    },
+                    "&::-webkit-scrollbar-thumb": {
+                      background: "rgba(0,0,0,0.2)",
+                      borderRadius: "2px",
+                    },
                   }}
                 >
-                  “{testimonial.message}”
+                  "{testimonial.message}"
                 </Typography>
                 <Typography
                   variant="h6"
                   fontWeight="bold"
                   fontFamily="var(--font-syne)"
+                  sx={{ mt: "auto" }}
                 >
                   {testimonial.name}
                 </Typography>
