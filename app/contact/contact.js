@@ -65,7 +65,7 @@ export default function Contact() {
 
   const socialLinks = [
     { icon: <FaFacebookF />, color: "#1877F2", link: "https://www.facebook.com/share/1AZexmgig9/?mibextid=wwXIfr" },
-    { icon: <FaWhatsapp />, color: "#25D366", link: "https://wa.me/919910954993" }, // Replace with actual number
+    { icon: <FaWhatsapp />, color: "#25D366", link: "https://wa.me/919910954993" },
     { icon: <FaInstagram />, color: "#E4405F", link: "https://www.instagram.com/stallcraftdesigns" },
   ];
 
@@ -170,15 +170,40 @@ export default function Contact() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4, duration: 0.6 }}
               >
-                <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 4 }}>
-                  <Phone color="error" />
-                  <Typography
-                    fontFamily="var(--font-syne)"
-                    fontSize="20px"
-                    fontWeight="bold"
-                  >
-                    +91 9910-954-993
-                  </Typography>
+                <Box sx={{ display: "flex", alignItems: "flex-start", gap: 2, mb: 4 }}>
+                  <Phone color="error" sx={{ mt: 0.5 }} />
+                  <Box>
+                    <Typography
+                      component="a"
+                      href="tel:+919910954993"
+                      fontFamily="var(--font-syne)"
+                      fontSize="20px"
+                      fontWeight="bold"
+                      sx={{ display: "block", color: "inherit", textDecoration: "none", "&:hover": { color: "error.main" } }}
+                    >
+                      +91 9910-954-993
+                    </Typography>
+                    <Typography
+                      component="a"
+                      href="tel:+918273395819"
+                      fontFamily="var(--font-syne)"
+                      fontSize="20px"
+                      fontWeight="bold"
+                      sx={{ display: "block", color: "inherit", textDecoration: "none", "&:hover": { color: "error.main" } }}
+                    >
+                      +91 8273-395-819
+                    </Typography>
+                    <Typography
+                      component="a"
+                      href="tel:+917668175123"
+                      fontFamily="var(--font-syne)"
+                      fontSize="20px"
+                      fontWeight="bold"
+                      sx={{ display: "block", color: "inherit", textDecoration: "none", "&:hover": { color: "error.main" } }}
+                    >
+                      +91 7668-175-123
+                    </Typography>
+                  </Box>
                 </Box>
               </motion.div>
               <motion.div

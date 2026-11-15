@@ -137,7 +137,7 @@ export default function Footer() {
             <Box sx={{ display: "flex", gap: 2 }}>
               {[
                 { icon: FaFacebookF, color: "#1877F2", href: "https://www.facebook.com/share/1AZexmgig9/?mibextid=wwXIfr" },
-                { icon: FaWhatsapp, color: "#25D366", href: "https://wa.me/919910954993" }, // Replace with actual number
+                { icon: FaWhatsapp, color: "#25D366", href: "https://wa.me/919910954993" },
                 { icon: FaInstagram, color: "#E4405F", href: "https://www.instagram.com/stallcraftdesigns" },
               ].map(({ icon: Icon, href, color }, index) => (
                 <IconButton
