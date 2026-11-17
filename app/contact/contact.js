@@ -65,7 +65,7 @@ export default function Contact() {
 
   const socialLinks = [
     { icon: <FaFacebookF />, color: "#1877F2", link: "https://www.facebook.com/share/1AZexmgig9/?mibextid=wwXIfr" },
-    { icon: <FaWhatsapp />, color: "#25D366", link: "https://wa.me/919910954993" },
+    { icon: <FaWhatsapp />, color: "#25D366", link: "https://wa.me/918750064794" },
     { icon: <FaInstagram />, color: "#E4405F", link: "https://www.instagram.com/stallcraftdesigns" },
   ];
 
@@ -173,16 +173,6 @@ export default function Contact() {
                 <Box sx={{ display: "flex", alignItems: "flex-start", gap: 2, mb: 4 }}>
                   <Phone color="error" sx={{ mt: 0.5 }} />
                   <Box>
-                    <Typography
-                      component="a"
-                      href="tel:+919910954993"
-                      fontFamily="var(--font-syne)"
-                      fontSize="20px"
-                      fontWeight="bold"
-                      sx={{ display: "block", color: "inherit", textDecoration: "none", "&:hover": { color: "error.main" } }}
-                    >
-                      +91 9910-954-993
-                    </Typography>
                     <Typography
                       component="a"
                       href="tel:+918273395819"
